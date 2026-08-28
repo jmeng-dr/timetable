@@ -1,0 +1,798 @@
+<meta charset="utf-8">
+<title>中法25级课表</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+<style>
+:root{
+  --bg:#F4F6F5; --surface:#FFFFFF; --surface-2:#EDF0EE; --line:#DFE4E1; --line-strong:#C4CDC8;
+  --ink:#141C18; --ink-2:#5D6C65; --ink-3:#8B978F; --accent:#12705B; --accent-soft:#DCEBE5;
+  --today:#B4462F; --shadow:0 1px 3px rgba(20,28,24,.10),0 8px 24px rgba(20,28,24,.06);
+  --tint:9%; --tint-2:16%; --on-accent:#FFFFFF;
+  --p1:hsl(0 52% 38%);--p2:hsl(15 52% 38%);--p3:hsl(30 52% 38%);--p4:hsl(45 52% 38%);--p5:hsl(60 52% 38%);--p6:hsl(80 52% 38%);--p7:hsl(100 52% 38%);--p8:hsl(120 52% 38%);--p9:hsl(145 52% 38%);--p10:hsl(165 52% 38%);--p11:hsl(180 52% 38%);--p12:hsl(195 52% 38%);--p13:hsl(210 52% 38%);--p14:hsl(225 52% 38%);--p15:hsl(240 52% 38%);--p16:hsl(255 52% 38%);--p17:hsl(270 52% 38%);--p18:hsl(285 52% 38%);--p19:hsl(300 52% 38%);--p20:hsl(315 52% 38%);--p21:hsl(330 52% 38%);--p22:hsl(345 52% 38%);--p23:hsl(20 52% 38%);--p24:hsl(200 52% 38%);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0E1412; --surface:#161D1A; --surface-2:#1D2622; --line:#26302B; --line-strong:#37443E;
+  --ink:#E9EFEB; --ink-2:#9FADA6; --ink-3:#71807A; --accent:#4FBF9E; --accent-soft:#173630;
+  --today:#E4785C; --shadow:0 1px 3px rgba(0,0,0,.5),0 10px 28px rgba(0,0,0,.4);
+  --tint:15%; --tint-2:26%; --on-accent:#08120F;
+  --p1:hsl(0 62% 70%);--p2:hsl(15 62% 70%);--p3:hsl(30 62% 70%);--p4:hsl(45 62% 70%);--p5:hsl(60 62% 70%);--p6:hsl(80 62% 70%);--p7:hsl(100 62% 70%);--p8:hsl(120 62% 70%);--p9:hsl(145 62% 70%);--p10:hsl(165 62% 70%);--p11:hsl(180 62% 70%);--p12:hsl(195 62% 70%);--p13:hsl(210 62% 70%);--p14:hsl(225 62% 70%);--p15:hsl(240 62% 70%);--p16:hsl(255 62% 70%);--p17:hsl(270 62% 70%);--p18:hsl(285 62% 70%);--p19:hsl(300 62% 70%);--p20:hsl(315 62% 70%);--p21:hsl(330 62% 70%);--p22:hsl(345 62% 70%);--p23:hsl(20 62% 70%);--p24:hsl(200 62% 70%);
+}}
+:root[data-theme="dark"]{
+  --bg:#0E1412; --surface:#161D1A; --surface-2:#1D2622; --line:#26302B; --line-strong:#37443E;
+  --ink:#E9EFEB; --ink-2:#9FADA6; --ink-3:#71807A; --accent:#4FBF9E; --accent-soft:#173630;
+  --today:#E4785C; --shadow:0 1px 3px rgba(0,0,0,.5),0 10px 28px rgba(0,0,0,.4);
+  --tint:15%; --tint-2:26%; --on-accent:#08120F;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  -webkit-text-size-adjust:100%;overscroll-behavior-y:none}
+.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+
+.app{--gutter:32px;--cols:32px repeat(7,1fr);max-width:720px;margin:0 auto;min-height:100vh;background:var(--bg);display:flex;flex-direction:column}
+header{position:sticky;top:0;z-index:30;background:var(--surface);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:10px;padding:10px 12px 8px}
+.wk{display:flex;align-items:baseline;gap:8px;flex:1;min-width:0}
+.wk b{font-size:19px;font-weight:700;letter-spacing:.01em}
+.wk span{font-size:12px;color:var(--ink-2)}
+.nav{display:flex;gap:4px}
+.nav button{width:32px;height:32px;border-radius:9px;background:var(--surface-2);color:var(--ink-2);
+  display:grid;place-items:center;transition:background .15s}
+.nav button:active{background:var(--line)}
+.nav button[disabled]{opacity:.35}
+.today-btn{height:32px;padding:0 12px;border-radius:9px;background:var(--accent-soft);color:var(--accent);
+  font-size:13px;font-weight:500}
+.classes{display:flex;gap:6px;padding:0 12px 10px;align-items:center}
+.classes .lbl{font-size:11px;color:var(--ink-3);letter-spacing:.08em;margin-right:2px}
+.chip{padding:5px 10px;border-radius:999px;font-size:13px;color:var(--ink-2);background:var(--surface-2);
+  border:1px solid transparent;transition:.15s}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);font-weight:500}
+
+.theme{margin-left:auto;display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:999px;
+  background:var(--surface-2);color:var(--ink-2);font-size:12px}
+.theme svg{display:block}
+.days{display:grid;grid-template-columns:var(--cols);border-top:1px solid var(--line)}
+.days>div{padding:6px 2px 7px;text-align:center;border-left:1px solid var(--line)}
+.days>div:first-child{border-left:0}
+.dow{font-size:11px;color:var(--ink-3);line-height:1.4}
+.dnum{font-size:13px;line-height:1.5;color:var(--ink-2)}
+.days .is-today .dow{color:var(--today)}
+.days .is-today .dnum{color:#fff;background:var(--today);border-radius:999px;display:inline-block;
+  min-width:22px;padding:0 5px;font-weight:500}
+
+.exam-strip{display:flex;gap:8px;align-items:center;padding:7px 12px;background:var(--surface-2);
+  border-bottom:1px solid var(--line);font-size:12px;color:var(--ink-2)}
+.exam-strip b{color:var(--today);font-weight:500}
+
+.viewport{flex:1;padding-bottom:24px;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+.slide{transition:transform .22s cubic-bezier(.3,.7,.4,1),opacity .22s}
+.grid{position:relative}
+.rows{display:grid}
+.row{display:grid;grid-template-columns:var(--cols);border-bottom:1px solid var(--line)}
+.row.sep{border-bottom:1px solid var(--line-strong)}
+.row .cell{border-left:1px solid var(--line);background:var(--surface)}
+.row .cell.weekend{background:var(--surface-2)}
+.row .cell.today{background:var(--accent-soft);opacity:.55}
+.tick{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  background:var(--bg);color:var(--ink-3)}
+.tick .n{font-size:12px;color:var(--ink-2)}
+.tick .t{font-size:9px;letter-spacing:-.02em}
+.blocks{position:absolute;inset:0 0 0 var(--gutter);pointer-events:none}
+.blk{position:absolute;pointer-events:auto;border-radius:7px;padding:4px 3px;overflow:hidden;text-align:left;
+  background:color-mix(in srgb,var(--cb) var(--tint),var(--surface));
+  border-left:3px solid var(--c);color:var(--ink);display:block;
+  box-shadow:0 1px 1px rgba(0,0,0,.04)}
+.blk:active{background:color-mix(in srgb,var(--cb) var(--tint-2),var(--surface))}
+.blk .nm{font-size:10.5px;font-weight:500;line-height:1.28;color:var(--c);
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;word-break:break-all}
+.blk .lc{font-size:9px;line-height:1.4;color:var(--ink-2);margin-top:2px;overflow-wrap:anywhere;letter-spacing:-.01em}
+.blk .gp{font-size:9px;color:var(--ink-2);opacity:.8}
+.nowline{position:absolute;left:0;right:0;height:0;border-top:2px solid var(--today);z-index:5;pointer-events:none}
+.nowline::before{content:"";position:absolute;left:-4px;top:-5px;width:8px;height:8px;border-radius:50%;background:var(--today)}
+.empty{padding:40px 20px;text-align:center;color:var(--ink-3);font-size:13px}
+
+.fab{position:fixed;right:16px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:40;
+  width:52px;height:52px;border-radius:50%;background:var(--accent);color:var(--on-accent);
+  display:grid;place-items:center;box-shadow:var(--shadow)}
+.fab:active{transform:scale(.94)}
+.modal{position:fixed;inset:0;z-index:70;background:rgba(10,16,14,.5);display:flex;
+  align-items:flex-end;justify-content:center}
+.modal .card{background:var(--surface);border-radius:16px 16px 0 0;width:100%;max-width:720px;
+  padding:16px 18px calc(20px + env(safe-area-inset-bottom));max-height:92vh;overflow-y:auto;box-shadow:var(--shadow)}
+.modal h3{margin:0 0 14px;font-size:17px}
+.f{display:grid;grid-template-columns:56px 1fr;align-items:center;gap:10px;margin-bottom:11px}
+.f>span{font-size:12.5px;color:var(--ink-3)}
+.f input[type=text],.f select,.f textarea{width:100%;padding:9px 10px;border-radius:9px;
+  border:1px solid var(--line-strong);background:var(--surface-2);color:var(--ink);
+  font:400 14px/1.5 inherit;font-family:inherit}
+.f textarea{min-height:60px;resize:vertical}
+.f .two{display:flex;align-items:center;gap:8px}
+.f .hint{font-size:11.5px;color:var(--ink-3);line-height:1.6;margin-top:5px}
+.f .hint b{color:var(--accent);font-weight:500}
+.f .two select{flex:1}
+.acts2{display:flex;gap:8px;align-items:center;margin-top:16px}
+.acts2 .del{color:var(--today);font-size:13px;margin-right:auto}
+.acts2 button.g{padding:9px 16px;border-radius:10px;background:var(--surface-2);font-size:14px}
+.acts2 button.primary{background:var(--accent);color:var(--on-accent);font-weight:500}
+.sheet-acts{display:flex;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.sheet-acts button{padding:8px 15px;border-radius:9px;background:var(--surface-2);font-size:13.5px}
+.sheet-acts .del{color:var(--today);margin-left:auto}
+.sheet-bg{position:fixed;inset:0;background:rgba(10,16,14,.45);z-index:50;opacity:0;transition:opacity .2s}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:51;max-height:88vh;overflow-y:auto;background:var(--surface);border-radius:16px 16px 0 0;
+  padding:16px 18px calc(24px + env(safe-area-inset-bottom));box-shadow:var(--shadow);
+  transform:translateY(101%);transition:transform .26s cubic-bezier(.3,.8,.4,1);max-width:720px;margin:0 auto}
+.sheet.open{transform:none}.sheet-bg.open{opacity:1}
+.sheet .hdl{width:36px;height:4px;border-radius:2px;background:var(--line-strong);margin:-6px auto 12px}
+.sheet h2{margin:0 0 2px;font-size:18px;font-weight:700;line-height:1.3}
+.sheet .sub{font-size:12px;color:var(--ink-2);margin-bottom:14px}
+.kv{display:grid;grid-template-columns:58px 1fr;gap:6px 10px;font-size:13px;line-height:1.55}
+.kv dt{color:var(--ink-3);font-size:12px}
+.kv dd{margin:0;color:var(--ink)}
+.swatch{width:24px;height:24px;border-radius:50%;background:var(--sw);vertical-align:-5px;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.12);display:inline-block}
+.swatch-row{display:flex;align-items:center;gap:9px}
+.picker{margin-top:10px;border:1px solid var(--line);border-radius:12px;padding:12px 10px 10px;
+  background:var(--surface-2)}
+.wheel{position:relative;margin:0 auto}
+.wheel button{position:absolute;background:var(--c);
+  clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);display:grid;place-items:center}
+.wheel button.on::after{content:"";width:8px;height:8px;border-radius:50%;background:#fff;
+  box-shadow:0 0 0 1.5px rgba(0,0,0,.35)}
+.pick-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;
+  padding-top:10px;border-top:1px solid var(--line)}
+.pick-foot label{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink-2)}
+.pick-foot input{width:16px;height:16px;accent-color:var(--accent)}
+.pick-foot button{font-size:12.5px;color:var(--accent);white-space:nowrap}
+.note-wrap{margin-top:16px;border-top:1px solid var(--line);padding-top:14px}
+.note-wrap label{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--ink-3);margin-bottom:6px}
+.note-wrap .saved{color:var(--accent);opacity:0;transition:opacity .2s}
+.note-wrap .saved.on{opacity:1}
+#noteBox{width:100%;min-height:74px;resize:vertical;padding:9px 10px;border-radius:9px;
+  border:1px solid var(--line-strong);background:var(--surface-2);color:var(--ink);
+  font:400 14px/1.55 inherit;font-family:inherit}
+#noteBox::placeholder{color:var(--ink-3)}
+.note-hint{font-size:11px;color:var(--ink-3);margin-top:7px;line-height:1.6;display:flex;gap:10px;flex-wrap:wrap}
+.note-hint button{color:var(--accent);text-decoration:underline;text-underline-offset:2px}
+.blk .dot{position:absolute;top:4px;right:4px;width:5px;height:5px;border-radius:50%;background:var(--c)}
+.backup{position:fixed;inset:0;z-index:60;background:rgba(10,16,14,.5);display:grid;place-items:center;padding:20px}
+.backup .card{background:var(--surface);border-radius:14px;padding:16px;max-width:520px;width:100%;box-shadow:var(--shadow)}
+.backup h3{margin:0 0 4px;font-size:15px}
+.backup p{margin:0 0 10px;font-size:12px;color:var(--ink-2);line-height:1.6}
+.backup textarea{width:100%;height:150px;font:400 12px/1.5 "IBM Plex Mono",monospace;padding:8px;
+  border-radius:9px;border:1px solid var(--line-strong);background:var(--surface-2);color:var(--ink)}
+.backup .acts{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
+.backup .acts button{padding:7px 14px;border-radius:9px;background:var(--surface-2);font-size:13px}
+.backup .acts .primary{background:var(--accent);color:var(--on-accent)}
+@media (max-width:400px){#themeTxt{display:none}.theme{padding:6px 9px}.classes{gap:5px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="app">
+  <header>
+    <div class="bar">
+      <div class="wk"><b id="wkLabel">第 1 周</b><span id="wkRange"></span></div>
+      <button class="today-btn" id="todayBtn" hidden>本周</button>
+      <div class="nav">
+        <button id="prev" aria-label="上一周"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <button id="next" aria-label="下一周"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+    </div>
+    <div class="classes">
+      <span class="lbl">班级</span>
+      <button class="chip" data-cls="1">1 班</button>
+      <button class="chip" data-cls="2">2 班</button>
+      <button class="chip" data-cls="3">3 班</button>
+      <button class="chip" data-cls="4">4 班</button>
+      <button class="theme" id="themeBtn" aria-label="切换配色"><span id="themeIcon"></span><span id="themeTxt"></span></button>
+    </div>
+    <div class="days" id="days"></div>
+    <div class="exam-strip" id="examStrip" hidden></div>
+  </header>
+  <div class="viewport" id="viewport">
+    <div class="slide" id="slide"></div>
+  </div>
+</div>
+<button class="fab" id="fab" aria-label="新建日程"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+<div class="sheet-bg" id="sheetBg" hidden></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" hidden>
+  <div class="hdl"></div>
+  <h2 id="shTitle"></h2>
+  <div class="sub" id="shSub"></div>
+  <dl class="kv" id="shKv"></dl>
+  <div class="sheet-acts" id="sheetActs" hidden>
+    <button type="button" id="shEdit">编辑</button>
+    <button type="button" class="del" id="shDelete">删除</button>
+  </div>
+  <div class="picker" id="picker" hidden>
+    <div class="wheel" id="wheel"></div>
+    <div class="pick-foot">
+      <label id="applyAllRow"><input type="checkbox" id="applyAll" checked>改这门课的全部课时</label>
+      <button type="button" id="resetColor">恢复默认</button>
+    </div>
+  </div>
+  <div class="note-wrap">
+    <label for="noteBox">备注<span class="saved" id="noteSaved">已保存</span></label>
+    <textarea id="noteBox" placeholder="例如：带《细胞生物学》课本、这节交作业"></textarea>
+    <div class="note-hint">
+      <span>只保存在这台设备的浏览器里，别人看不到。</span>
+      <button type="button" id="backupBtn">备份 / 恢复</button>
+    </div>
+  </div>
+</div>
+<div class="modal" id="evModal" hidden>
+  <div class="card">
+    <h3 id="evHead">新建日程</h3>
+    <div class="f"><span>名称</span><input type="text" id="evName" placeholder="如：小组讨论、健身"></div>
+    <div class="f"><span>星期</span><select id="evDay"></select></div>
+    <div class="f"><span>节次</span><div class="two"><select id="evS"></select><span>到</span><select id="evE"></select></div></div>
+    <div class="f"><span>地点</span><input type="text" id="evLoc" placeholder="可留空"></div>
+    <div class="f"><span>重复</span><select id="evRep">
+      <option value="once">只有这一周</option>
+      <option value="week">每周</option>
+      <option value="custom">指定周次</option>
+    </select></div>
+    <div class="f" id="evWeeksRow" hidden><span>周次</span><div>
+      <input type="text" id="evWeeks" placeholder="3, 5-8, 11">
+      <div class="hint" id="evWeeksHint"></div>
+    </div></div>
+    <div class="f"><span>颜色</span><span class="swatch-row"><button type="button" id="evSwatchBtn"><span class="swatch" id="evSwatch"></span></button></span></div>
+    <div class="picker" id="evPicker" hidden><div class="wheel" id="evWheel"></div></div>
+    <div class="f"><span>备注</span><textarea id="evNote" placeholder="可留空"></textarea></div>
+    <div class="acts2">
+      <button type="button" class="del" id="evDelete" hidden>删除</button>
+      <button type="button" class="g" id="evCancel">取消</button>
+      <button type="button" class="g primary" id="evSave">保存</button>
+    </div>
+  </div>
+</div>
+<div class="backup" id="backupBox" hidden>
+  <div class="card">
+    <h3>备份 / 恢复备注</h3>
+    <p>备注和自定义颜色存在这台设备上，换手机或清理浏览器数据会丢失。复制下面的文字保存起来即可备份；把之前备份的文字粘贴进来再点「恢复」，备注就回来了。</p>
+    <textarea id="backupText"></textarea>
+    <div class="acts">
+      <button type="button" id="backupClose">关闭</button>
+      <button type="button" class="primary" id="backupRestore">恢复</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const DATA = {"title":"华中科技大学生物科学（中外合作办学）2025级2026-2027年度第一学期课表","info":{"马克思主义基本原理":{"hc":"40/2.5","teacher":"杨成林","exam":"2027年1月12日（周二） 下午"},"生物化学（一）":{"hc":"48/3","teacher":"PARTHO SAROTHI RAY、Thierry TOUZE、蒋新农、龚健科","exam":"2026年12月25日（周五） 晚上"},"物理化学":{"hc":"32/2","teacher":"梅付名","exam":"2026年11月25日（周三） 晚上"},"化学生物学与进化":{"hc":"22/1.4","teacher":"Isabelle Salard、彭欢","exam":"2026年11月11日（周三） 晚上"},"物质结构":{"hc":"22/1.4","teacher":"Marie-Pierre Gaigeot、Alvaro Cimas Samaniego、彭欢","exam":"2026年12月24日（周四） 晚上"},"细胞生物学":{"hc":"54/3.4","teacher":"PREVOST Grégolre、Pierre、André、陈俊威、刘剑淼、杨英、易平","exam":"2027年1月7日（周四） 下午"},"PIX 数字技能":{"hc":"22/1.4","teacher":"Pineiro Audrey、christian、Anh VU TRAN","exam":"考查　2026年11月26日（周四）5–6节 PIX CERTIFICATION"},"生物学中的数学 1":{"hc":"16/1","teacher":"王申","exam":"2026年10月13日（周二） 晚上"},"习近平新时代中国特色社会主义思想概论":{"hc":"48/3","teacher":"宋海佩、郑可","exam":"2026年12月5日（周六） 下午"},"形势与政策":{"hc":"64/2","teacher":"李翔","exam":"考查"},"概率论与数理统计（B）":{"hc":"40/2.5","teacher":"孙旭","exam":"2027年1月9日（周六） 上午"},"细胞生物学实验":{"hc":"24/1.5","teacher":"曾小美","exam":"考查"},"生物化学实验（一）":{"hc":"24/1.5","teacher":"陈明洁","exam":"考查"},"法语学习 II":{"hc":"32/0","teacher":"Adrian Gershwin（1-2班） 宋歌（3-4班）","exam":"考查"},"人工智能概论（C）":{"hc":"32/2","teacher":"蔡新元、陈熹、侯云鹏、文晨、肖然、张健、张露","exam":"考查"},"大学体育":{"hc":"60/1.8","teacher":"体育学院老师","exam":"考查"}},"rows":[{"name":"化学生物学与进化","weeks":[8],"grp":"2F","loc":"东十二楼309","day":1,"period":"1-2"},{"name":"PIX 数字技能","weeks":[9],"grp":"3F","loc":"东九楼A314","day":1,"period":"1-2"},{"name":"生物化学（一）","weeks":[9],"grp":"1C","loc":"东十二楼209","day":1,"period":"1-2"},{"name":"细胞生物学","weeks":[12,13],"grp":"合C","loc":"东十二楼101","day":1,"period":"1-2"},{"name":"生物化学实验（一）","weeks":[8],"grp":"1C","loc":"东十二楼508","day":1,"period":"1-2"},{"name":"细胞生物学","weeks":[16],"grp":"2F","loc":"东十二楼101","day":1,"period":"1-2"},{"name":"物质结构","weeks":[15],"grp":"1F","loc":"东十二楼109","day":1,"period":"1-2"},{"name":"物质结构","weeks":[15],"grp":"2F","loc":"东十二楼101","day":1,"period":"1-2"},{"name":"物理化学","weeks":[7],"grp":"合C","loc":"东十二楼204","day":1,"period":"1-2"},{"name":"PIX 数字技能","weeks":[4],"grp":"2F","loc":"东九楼A310","day":1,"period":"1-2"},{"name":"细胞生物学实验","weeks":[8],"grp":"3C","loc":"东十二楼502","day":1,"period":"1-2"},{"name":"生物化学实验（一）","weeks":[4],"grp":"4C","loc":"东十二楼508","day":1,"period":"1-2"},{"name":"生物化学（一）","weeks":[1,2,3,5,7],"grp":"合C","loc":"东十二楼417","day":1,"period":"3-4"},{"name":"化学生物学与进化","weeks":[8],"grp":"4F","loc":"东十二楼405","day":1,"period":"3-4"},{"name":"生物化学实验（一）","weeks":[8],"grp":"1C","loc":"东十二楼508","day":1,"period":"3-4"},{"name":"PIX 数字技能","weeks":[4],"grp":"1F","loc":"东九楼A314","day":1,"period":"3-4"},{"name":"概率论与数理统计（B）","weeks":[9,10,11,12,13,14,15,16,17,18],"grp":"合C","loc":"东九楼B401","day":1,"period":"3-4"},{"name":"细胞生物学实验","weeks":[8],"grp":"3C","loc":"东十二楼502","day":1,"period":"3-4"},{"name":"生物化学实验（一）","weeks":[4],"grp":"4C","loc":"东十二楼508","day":1,"period":"3-4"},{"name":"细胞生物学","weeks":[14],"grp":"合C","loc":"东十二楼202","day":1,"period":"5-6"},{"name":"细胞生物学","weeks":[15],"grp":"合F","loc":"东十二楼202","day":1,"period":"5-6"},{"name":"生物化学（一）","weeks":[13],"grp":"合F","loc":"东十二楼202","day":1,"period":"5-6"},{"name":"细胞生物学","weeks":[16],"grp":"3F","loc":"东十二楼202","day":1,"period":"5-6"},{"name":"习近平新时代中国特色社会主义思想概论","weeks":[1,2,3,4,5,6,7,8,9,10,11,12],"grp":"合C","loc":"东九楼B502","day":1,"period":"5-6"},{"name":"细胞生物学","weeks":[16],"grp":"1F","loc":"东十二楼112","day":1,"period":"7-8"},{"name":"生物化学（一）","weeks":[9],"grp":"3C","loc":"东十二楼209","day":1,"period":"7-8"},{"name":"生物学中的数学 1","weeks":[3],"grp":"合C","loc":"东十二楼112","day":1,"period":"7-8"},{"name":"PIX 数字技能","weeks":[9],"grp":"2F","loc":"东九楼A102","day":1,"period":"7-8"},{"name":"物理化学","weeks":[5],"grp":"合C","loc":"东十二楼202","day":1,"period":"7-8"},{"name":"PIX 数字技能","weeks":[4],"grp":"3F","loc":"东九楼A310","day":1,"period":"7-8"},{"name":"生物化学（一）","weeks":[10],"grp":"合C","loc":"东十二楼209","day":1,"period":"7-8"},{"name":"生物化学（一）","weeks":[12],"grp":"合F","loc":"东十二楼209","day":1,"period":"7-8"},{"name":"化学生物学与进化","weeks":[8],"grp":"3F","loc":"东十二楼209","day":1,"period":"7-8"},{"name":"物质结构","weeks":[15],"grp":"3F","loc":"东十二楼201","day":1,"period":"7-8"},{"name":"法语学习 II","weeks":[7],"grp":"1F","loc":"东九楼A202","day":1,"period":"7-8"},{"name":"法语学习 II","weeks":[13,14,15],"grp":"1F","loc":"东九楼A302","day":1,"period":"7-8"},{"name":"物质结构","weeks":[15],"grp":"4F","loc":"东十二楼112","day":1,"period":"7-8"},{"name":"生物化学（一）","weeks":[4],"grp":"合F","loc":"东十二楼F101","day":1,"period":"9-10"},{"name":"人工智能概论（C）","weeks":[7,8,9,16],"grp":"合C","loc":"东九楼C402","day":1,"period":"9-10"},{"name":"人工智能概论（C）","weeks":[17],"grp":"合C","loc":"东九楼C402","day":1,"period":"9-10"},{"name":"人工智能概论（C）","weeks":[10,11,12,13,14,15],"grp":"合C","loc":"（上课地点以通知为准）","day":1,"period":"9-10"},{"name":"人工智能概论（C）","weeks":[7,8,9,16],"grp":"合C","loc":"东九楼C402","day":1,"period":"11-12"},{"name":"人工智能概论（C）","weeks":[10,11,12,13,14,15],"grp":"合C","loc":"（上课地点以通知为准）","day":1,"period":"11-12"},{"name":"生物化学（一）","weeks":[9],"grp":"2C","loc":"东十二楼203","day":2,"period":"1-2"},{"name":"生物化学（一）","weeks":[10],"grp":"合C","loc":"东十二楼203","day":2,"period":"1-2"},{"name":"PIX 数字技能","weeks":[4,9],"grp":"4F","loc":"东九楼A312","day":2,"period":"1-2"},{"name":"细胞生物学实验","weeks":[4],"grp":"3C","loc":"东十二楼502","day":2,"period":"1-2"},{"name":"物质结构","weeks":[14,15],"grp":"1F","loc":"东十二楼203","day":2,"period":"1-2"},{"name":"生物化学（一）","weeks":[12,13],"grp":"2F","loc":"东十二楼203","day":2,"period":"1-2"},{"name":"物理化学","weeks":[1,2,3,5],"grp":"合C","loc":"东十二楼102","day":2,"period":"1-2"},{"name":"化学生物学与进化","weeks":[8],"grp":"1F","loc":"东十二楼203","day":2,"period":"1-2"},{"name":"法语学习 II","weeks":[9,12],"grp":"1F","loc":"东九楼A103","day":2,"period":"1-2"},{"name":"PIX 数字技能","weeks":[13],"grp":"1F","loc":"东九楼A310","day":2,"period":"1-2"},{"name":"细胞生物学","weeks":[16],"grp":"4F","loc":"东十二楼202","day":2,"period":"1-2"},{"name":"生物化学实验（一）","weeks":[6,8],"grp":"2C","loc":"东十二楼508","day":2,"period":"1-2"},{"name":"生物化学实验（一）","weeks":[11],"grp":"3C","loc":"东十二楼508","day":2,"period":"1-2"},{"name":"物质结构","weeks":[14,15],"grp":"1F","loc":"东十二楼203","day":2,"period":"1-2"},{"name":"物质结构","weeks":[14,15],"grp":"2F","loc":"东十二楼104","day":2,"period":"1-2"},{"name":"细胞生物学","weeks":[7],"grp":"合C","loc":"东十二楼212","day":2,"period":"3-4"},{"name":"生物化学（一）","weeks":[9],"grp":"4C","loc":"东十二楼405","day":2,"period":"3-4"},{"name":"细胞生物学","weeks":[10,17],"grp":"合C","loc":"东十二楼417","day":2,"period":"3-4"},{"name":"生物化学（一）","weeks":[12],"grp":"3F","loc":"东十二楼405","day":2,"period":"3-4"},{"name":"生物化学实验（一）","weeks":[6,8],"grp":"2C","loc":"东十二楼508","day":2,"period":"3-4"},{"name":"生物化学实验（一）","weeks":[11],"grp":"3C","loc":"东十二楼508","day":2,"period":"3-4"},{"name":"生物学中的数学 1","weeks":[1,2,3,5],"grp":"合C","loc":"东十二楼104","day":2,"period":"3-4"},{"name":"化学生物学与进化","weeks":[8],"grp":"4F","loc":"东十二楼405","day":2,"period":"3-4"},{"name":"生物化学（一）","weeks":[13],"grp":"1F","loc":"东十二楼405","day":2,"period":"3-4"},{"name":"细胞生物学","weeks":[11],"grp":"1C","loc":"东十二楼417","day":2,"period":"3-4"},{"name":"法语学习 II","weeks":[8],"grp":"1F","loc":"东九楼A203","day":2,"period":"3-4"},{"name":"细胞生物学","weeks":[15],"grp":"合F","loc":"东十二楼417","day":2,"period":"3-4"},{"name":"PIX 数字技能","weeks":[9],"grp":"1F","loc":"东九楼A312","day":2,"period":"3-4"},{"name":"细胞生物学","weeks":[16],"grp":"2F","loc":"东十二楼417","day":2,"period":"3-4"},{"name":"法语学习 II","weeks":[9,12],"grp":"2F","loc":"东九楼A103","day":2,"period":"3-4"},{"name":"细胞生物学实验","weeks":[4],"grp":"3C","loc":"东十二楼502","day":2,"period":"3-4"},{"name":"PIX 数字技能","weeks":[4],"grp":"1F","loc":"东九楼A315","day":2,"period":"3-4"},{"name":"PIX 数字技能","weeks":[13],"grp":"3F","loc":"东九楼A310","day":2,"period":"3-4"},{"name":"生物化学（一）","weeks":[3],"grp":"合C","loc":"东十二楼112","day":2,"period":"5-6"},{"name":"生物化学实验（一）","weeks":[2],"grp":"2C","loc":"东十二楼508","day":2,"period":"5-6"},{"name":"大学体育","weeks":[4,5,6,7,8,9,10,11,12,13,14,15,16,17],"grp":"合C","loc":"中心操场","day":2,"period":"5-6"},{"name":"细胞生物学","weeks":[16],"grp":"1F","loc":"东十二楼304","day":2,"period":"7-8"},{"name":"生物化学（一）","weeks":[12],"grp":"4F","loc":"东十二楼403","day":2,"period":"7-8"},{"name":"物理化学","weeks":[7],"grp":"合C","loc":"东十二楼301","day":2,"period":"7-8"},{"name":"细胞生物学","weeks":[11],"grp":"4C","loc":"东十二楼304","day":2,"period":"7-8"},{"name":"PIX 数字技能","weeks":[9],"grp":"3F","loc":"东九楼A310","day":2,"period":"7-8"},{"name":"PIX 数字技能","weeks":[13],"grp":"4F","loc":"东九楼A312","day":2,"period":"7-8"},{"name":"物质结构","weeks":[14,15],"grp":"4F","loc":"东十二楼209","day":2,"period":"7-8"},{"name":"物质结构","weeks":[14,15],"grp":"3F","loc":"东十二楼310","day":2,"period":"7-8"},{"name":"法语学习 II","weeks":[8,13,15],"grp":"2F","loc":"东九楼A203","day":2,"period":"7-8"},{"name":"生物化学实验（一）","weeks":[2],"grp":"2C","loc":"东十二楼508","day":2,"period":"7-8"},{"name":"化学生物学与进化","weeks":[3,4,5],"grp":"合F","loc":"东十二楼301","day":2,"period":"7-8"},{"name":"化学生物学与进化","weeks":[8],"grp":"3F","loc":"东十二楼301","day":2,"period":"7-8"},{"name":"马克思主义基本原理","weeks":[9],"grp":"合C","loc":"东九楼C303","day":2,"period":"9-10"},{"name":"生物化学（一）","weeks":[12],"grp":"1F","loc":"东十二楼111","day":2,"period":"9-10"},{"name":"形势与政策","weeks":[8],"grp":"合C","loc":"上课地点以hub系统通知为准","day":2,"period":"9-10"},{"name":"马克思主义基本原理","weeks":[12],"grp":"合C","loc":"东九楼C303","day":2,"period":"11-12"},{"name":"细胞生物学","weeks":[12],"grp":"合C","loc":"东十二楼104","day":3,"period":"1-2"},{"name":"化学生物学与进化","weeks":[8],"grp":"1F","loc":"东十二楼102","day":3,"period":"1-2"},{"name":"PIX 数字技能","weeks":[4],"grp":"3F","loc":"东九楼A310","day":3,"period":"1-2"},{"name":"法语学习 II","weeks":[11],"grp":"3C","loc":"东九楼A204","day":3,"period":"1-2"},{"name":"细胞生物学","weeks":[15],"grp":"1F","loc":"东十二楼104","day":3,"period":"1-2"},{"name":"PIX 数字技能","weeks":[9],"grp":"2F","loc":"东九楼A312","day":3,"period":"1-2"},{"name":"生物化学（一）","weeks":[1,2,7],"grp":"合C","loc":"东十二楼109","day":3,"period":"1-2"},{"name":"生物化学（一）","weeks":[5],"grp":"合F","loc":"东十二楼109","day":3,"period":"1-2"},{"name":"物质结构","weeks":[14,15],"grp":"4F","loc":"东十二楼109","day":3,"period":"1-2"},{"name":"物质结构","weeks":[14,15],"grp":"3F","loc":"东十二楼112","day":3,"period":"1-2"},{"name":"法语学习 II","weeks":[13],"grp":"4C","loc":"东九楼A107","day":3,"period":"1-2"},{"name":"细胞生物学","weeks":[16],"grp":"3F","loc":"东十二楼104","day":3,"period":"1-2"},{"name":"生物化学（一）","weeks":[13],"grp":"3F","loc":"东十二楼109","day":3,"period":"1-2"},{"name":"物质结构","weeks":[14],"grp":"1F","loc":"东十二楼207","day":3,"period":"3-4"},{"name":"生物化学（一）","weeks":[13],"grp":"4F","loc":"东十二楼104","day":3,"period":"3-4"},{"name":"细胞生物学","weeks":[15],"grp":"2F","loc":"东十二楼104","day":3,"period":"3-4"},{"name":"细胞生物学","weeks":[16],"grp":"4F","loc":"东十二楼104","day":3,"period":"3-4"},{"name":"法语学习 II","weeks":[13,14,15],"grp":"3C","loc":"东九楼A205","day":3,"period":"3-4"},{"name":"物质结构","weeks":[14],"grp":"2F","loc":"东十二楼104","day":3,"period":"3-4"},{"name":"习近平新时代中国特色社会主义思想概论","weeks":[1,2,3,4,5,6,7,8,9,10,11,12],"grp":"合C","loc":"东九楼B502","day":3,"period":"3-4"},{"name":"细胞生物学实验","weeks":[8],"grp":"1C","loc":"东十二楼502","day":3,"period":"5-6"},{"name":"化学生物学与进化","weeks":[8],"grp":"2F","loc":"东十二楼111","day":3,"period":"5-6"},{"name":"细胞生物学","weeks":[7,13],"grp":"合C","loc":"东十二楼417","day":3,"period":"5-6"},{"name":"细胞生物学","weeks":[11],"grp":"2F","loc":"东十二楼417","day":3,"period":"5-6"},{"name":"生物学中的数学 1","weeks":[5],"grp":"合C","loc":"东十二楼209","day":3,"period":"5-6"},{"name":"细胞生物学","weeks":[14],"grp":"3C","loc":"东十二楼417","day":3,"period":"5-6"},{"name":"生物化学实验（一）","weeks":[2,4],"grp":"1C","loc":"东十二楼508","day":3,"period":"5-6"},{"name":"细胞生物学","weeks":[15],"grp":"3F","loc":"东十二楼417","day":3,"period":"5-6"},{"name":"物质结构","weeks":[15],"grp":"1F","loc":"东十二楼201","day":3,"period":"5-6"},{"name":"物质结构","weeks":[15],"grp":"2F","loc":"东十二楼114","day":3,"period":"5-6"},{"name":"PIX 数字技能","weeks":[4],"grp":"2F","loc":"东九楼A312","day":3,"period":"5-6"},{"name":"PIX 数字技能","weeks":[9],"grp":"4F","loc":"东九楼A102","day":3,"period":"5-6"},{"name":"法语学习 II","weeks":[14],"grp":"2F","loc":"东九楼A106","day":3,"period":"5-6"},{"name":"法语学习 II","weeks":[2,9],"grp":"3C","loc":"东九楼A104","day":3,"period":"5-6"},{"name":"法语学习 II","weeks":[3,4],"grp":"4C","loc":"东九楼A111","day":3,"period":"5-6"},{"name":"法语学习 II","weeks":[14,15],"grp":"4C","loc":"东九楼A207","day":3,"period":"5-6"},{"name":"PIX 数字技能","weeks":[3],"grp":"1F","loc":"东九楼A312","day":3,"period":"5-6"},{"name":"细胞生物学","weeks":[16],"grp":"2F","loc":"东十二楼417","day":3,"period":"5-6"},{"name":"细胞生物学实验","weeks":[8],"grp":"1C","loc":"东十二楼502","day":3,"period":"7-8"},{"name":"PIX 数字技能","weeks":[3],"grp":"2F","loc":"东九楼A314","day":3,"period":"7-8"},{"name":"生物化学实验（一）","weeks":[2,4],"grp":"1C","loc":"东十二楼508","day":3,"period":"7-8"},{"name":"PIX 数字技能","weeks":[4],"grp":"4F","loc":"东九楼A314","day":3,"period":"7-8"},{"name":"概率论与数理统计（B）","weeks":[9,10,11,12,13,14,15,16,17,18],"grp":"合C","loc":"东九楼B401","day":3,"period":"7-8"},{"name":"法语学习 II","weeks":[3,4],"grp":"3C","loc":"东九楼A201","day":3,"period":"7-8"},{"name":"化学生物学与进化","weeks":[7],"grp":"合F","loc":"东十二楼101","day":3,"period":"7-8"},{"name":"法语学习 II","weeks":[2],"grp":"4C","loc":"东九楼A104","day":3,"period":"7-8"},{"name":"细胞生物学","weeks":[8],"grp":"合C","loc":"东十二楼111","day":3,"period":"9-10"},{"name":"细胞生物学","weeks":[16],"grp":"1F","loc":"东十二楼111","day":3,"period":"9-10"},{"name":"生物化学（一）","weeks":[12],"grp":"合F","loc":"东十二楼104","day":3,"period":"9-10"},{"name":"细胞生物学","weeks":[15],"grp":"4F","loc":"东十二楼111","day":3,"period":"9-10"},{"name":"物理化学","weeks":[4],"grp":"合C","loc":"东十二楼203","day":3,"period":"9-10"},{"name":"生物化学实验（一）","weeks":[7],"grp":"3C","loc":"东十二楼508","day":3,"period":"9-10"},{"name":"生物化学实验（一）","weeks":[9],"grp":"4C","loc":"东十二楼508","day":3,"period":"9-10"},{"name":"生物化学实验（一）","weeks":[7],"grp":"3C","loc":"东十二楼508","day":3,"period":"11-12"},{"name":"生物化学实验（一）","weeks":[9],"grp":"4C","loc":"东十二楼508","day":3,"period":"11-12"},{"name":"细胞生物学实验","weeks":[3],"grp":"1C","loc":"东十二楼502","day":4,"period":"1-2"},{"name":"化学生物学与进化","weeks":[7],"grp":"2F","loc":"东十二楼207","day":4,"period":"1-2"},{"name":"生物化学实验（一）","weeks":[3],"grp":"2C","loc":"东十二楼508","day":4,"period":"1-2"},{"name":"法语学习 II","weeks":[4],"grp":"2F","loc":"东九楼A208","day":4,"period":"1-2"},{"name":"法语学习 II","weeks":[10,12],"grp":"4C","loc":"东九楼A207","day":4,"period":"1-2"},{"name":"生物化学（一）","weeks":[4],"grp":"1F","loc":"东十二楼207","day":4,"period":"1-2"},{"name":"生物化学（一）","weeks":[8],"grp":"合C","loc":"东十二楼207","day":4,"period":"1-2"},{"name":"生物化学实验（一）","weeks":[7],"grp":"1C","loc":"东十二楼508","day":4,"period":"1-2"},{"name":"生物化学（一）","weeks":[12],"grp":"3F","loc":"东十二楼207","day":4,"period":"1-2"},{"name":"物理化学","weeks":[2,6],"grp":"合C","loc":"东十二楼204","day":4,"period":"1-2"},{"name":"生物化学（一）","weeks":[13],"grp":"合F","loc":"东十二楼207","day":4,"period":"1-2"},{"name":"细胞生物学","weeks":[9],"grp":"3C","loc":"东十二楼111","day":4,"period":"1-2"},{"name":"细胞生物学","weeks":[16],"grp":"4F","loc":"东十二楼111","day":4,"period":"1-2"},{"name":"物质结构","weeks":[15],"grp":"3F","loc":"东十二楼109","day":4,"period":"1-2"},{"name":"物质结构","weeks":[15],"grp":"4F","loc":"东十二楼114","day":4,"period":"1-2"},{"name":"PIX 数字技能","weeks":[12],"grp":"2F","loc":"东九楼A312","day":4,"period":"1-2"},{"name":"PIX 数字技能","weeks":[3],"grp":"3F","loc":"东九楼A101","day":4,"period":"1-2"},{"name":"生物化学实验（一）","weeks":[4],"grp":"3C","loc":"东十二楼508","day":4,"period":"1-2"},{"name":"生物化学实验（一）","weeks":[11],"grp":"4C","loc":"东十二楼508","day":4,"period":"1-2"},{"name":"PIX 数字技能","weeks":[9],"grp":"1F","loc":"东九楼A310","day":4,"period":"1-2"},{"name":"化学生物学与进化","weeks":[9],"grp":"4F","loc":"东十二楼207","day":4,"period":"1-2"},{"name":"细胞生物学实验","weeks":[3],"grp":"1C","loc":"东十二楼502","day":4,"period":"3-4"},{"name":"生物化学（一）","weeks":[4],"grp":"2F","loc":"东十二楼102","day":4,"period":"3-4"},{"name":"生物化学实验（一）","weeks":[3],"grp":"2C","loc":"东十二楼508","day":4,"period":"3-4"},{"name":"生物化学实验（一）","weeks":[4],"grp":"3C","loc":"东十二楼508","day":4,"period":"3-4"},{"name":"细胞生物学","weeks":[8],"grp":"合C","loc":"东九楼D517","day":4,"period":"3-4"},{"name":"生物化学（一）","weeks":[12],"grp":"4F","loc":"东十二楼102","day":4,"period":"3-4"},{"name":"细胞生物学","weeks":[13],"grp":"合C","loc":"东十二楼112","day":4,"period":"3-4"},{"name":"化学生物学与进化","weeks":[7],"grp":"3F","loc":"东十二楼103","day":4,"period":"3-4"},{"name":"细胞生物学","weeks":[10],"grp":"合C","loc":"东十二楼104","day":4,"period":"3-4"},{"name":"化学生物学与进化","weeks":[9],"grp":"3F","loc":"东十二楼414","day":4,"period":"3-4"},{"name":"生物学中的数学 1","weeks":[2],"grp":"合C","loc":"东十二楼102","day":4,"period":"3-4"},{"name":"细胞生物学","weeks":[9],"grp":"2C","loc":"东十二楼402","day":4,"period":"3-4"},{"name":"生物化学（一）","weeks":[6],"grp":"合C","loc":"东十二楼102","day":4,"period":"3-4"},{"name":"细胞生物学","weeks":[11],"grp":"3C","loc":"东十二楼112","day":4,"period":"3-4"},{"name":"生物化学实验（一）","weeks":[7],"grp":"1C","loc":"东十二楼508","day":4,"period":"3-4"},{"name":"细胞生物学","weeks":[15],"grp":"合F","loc":"东十二楼112","day":4,"period":"3-4"},{"name":"物质结构","weeks":[14],"grp":"1F","loc":"东十二楼111","day":4,"period":"3-4"},{"name":"物质结构","weeks":[14],"grp":"2F","loc":"东十二楼101","day":4,"period":"3-4"},{"name":"物理化学","weeks":[1],"grp":"合C","loc":"东十二楼109","day":4,"period":"3-4"},{"name":"细胞生物学","weeks":[14],"grp":"4C","loc":"东十二楼112","day":4,"period":"3-4"},{"name":"法语学习 II","weeks":[4],"grp":"1F","loc":"东九楼A401","day":4,"period":"3-4"},{"name":"细胞生物学","weeks":[16],"grp":"3F","loc":"东十二楼112","day":4,"period":"3-4"},{"name":"PIX 数字技能","weeks":[3],"grp":"4F","loc":"东九楼A101","day":4,"period":"3-4"},{"name":"PIX 数字技能","weeks":[9],"grp":"4F","loc":"东九楼A310","day":4,"period":"3-4"},{"name":"生物化学实验（一）","weeks":[11],"grp":"4C","loc":"东十二楼508","day":4,"period":"3-4"},{"name":"法语学习 II","weeks":[7],"grp":"2F","loc":"东九楼A306","day":4,"period":"3-4"},{"name":"PIX 数字技能","weeks":[12],"grp":"1F","loc":"东九楼A310","day":4,"period":"3-4"},{"name":"细胞生物学","weeks":[16],"grp":"1F","loc":"东十二楼112","day":4,"period":"5-6"},{"name":"化学生物学与进化","weeks":[9],"grp":"2F","loc":"东十二楼102","day":4,"period":"5-6"},{"name":"物理化学","weeks":[3],"grp":"合C","loc":"东十二楼104","day":4,"period":"5-6"},{"name":"生物化学（一）","weeks":[4],"grp":"3F","loc":"东十二楼103","day":4,"period":"5-6"},{"name":"法语学习 II","weeks":[8,10,12],"grp":"3C","loc":"东九楼A102","day":4,"period":"5-6"},{"name":"法语学习 II","weeks":[9],"grp":"4C","loc":"东九楼A102","day":4,"period":"5-6"},{"name":"细胞生物学实验","weeks":[4],"grp":"2C","loc":"东十二楼502","day":4,"period":"5-6"},{"name":"生物化学实验（一）","weeks":[6,11],"grp":"4C","loc":"东十二楼508","day":4,"period":"5-6"},{"name":"细胞生物学","weeks":[15],"grp":"3F","loc":"东十二楼112","day":4,"period":"5-6"},{"name":"PIX 数字技能","weeks":[8],"grp":"4F","loc":"东九楼A310","day":4,"period":"5-6"},{"name":"生物化学（一）","weeks":[4],"grp":"4F","loc":"东十二楼103","day":4,"period":"7-8"},{"name":"化学生物学与进化","weeks":[7,9],"grp":"1F","loc":"东十二楼210","day":4,"period":"7-8"},{"name":"物质结构","weeks":[15],"grp":"1F","loc":"东十二楼104","day":4,"period":"7-8"},{"name":"物质结构","weeks":[15],"grp":"2F","loc":"东十二楼103","day":4,"period":"7-8"},{"name":"法语学习 II","weeks":[8],"grp":"4C","loc":"东九楼A102","day":4,"period":"7-8"},{"name":"细胞生物学实验","weeks":[4],"grp":"2C","loc":"东十二楼502","day":4,"period":"7-8"},{"name":"生物化学实验（一）","weeks":[6,11],"grp":"4C","loc":"东十二楼508","day":4,"period":"7-8"},{"name":"细胞生物学","weeks":[16],"grp":"2F","loc":"东十二楼112","day":4,"period":"7-8"},{"name":"PIX 数字技能","weeks":[3],"grp":"2F","loc":"东九楼A312","day":4,"period":"7-8"},{"name":"PIX 数字技能","weeks":[8],"grp":"3F","loc":"东九楼A312","day":4,"period":"7-8"},{"name":"物质结构","weeks":[9,10,11,12],"grp":"合F","loc":"东十二楼103","day":4,"period":"9-10"},{"name":"化学生物学与进化","weeks":[7],"grp":"4F","loc":"东十二楼403","day":4,"period":"9-10"},{"name":"物理化学","weeks":[8],"grp":"合C","loc":"东十二楼103","day":4,"period":"9-10"},{"name":"生物化学实验（一）","weeks":[2],"grp":"3C","loc":"东十二楼508","day":4,"period":"9-10"},{"name":"化学生物学与进化","weeks":[6],"grp":"合F","loc":"东十二楼209","day":4,"period":"9-10"},{"name":"生物化学实验（一）","weeks":[2],"grp":"3C","loc":"东十二楼508","day":4,"period":"11-12"},{"name":"细胞生物学实验","weeks":[11],"grp":"1C","loc":"东十二楼502","day":5,"period":"1-2"},{"name":"生物化学（一）","weeks":[12],"grp":"2F","loc":"东十二楼111","day":5,"period":"1-2"},{"name":"物理化学","weeks":[8],"grp":"合C","loc":"东十二楼111","day":5,"period":"1-2"},{"name":"化学生物学与进化","weeks":[7],"grp":"3F","loc":"东十二楼405","day":5,"period":"1-2"},{"name":"法语学习 II","weeks":[12,13,15],"grp":"1F","loc":"东九楼A203","day":5,"period":"1-2"},{"name":"物质结构","weeks":[14],"grp":"4F","loc":"东十二楼111","day":5,"period":"1-2"},{"name":"PIX 数字技能","weeks":[3],"grp":"1F","loc":"东九楼A310","day":5,"period":"1-2"},{"name":"PIX 数字技能","weeks":[9],"grp":"2F","loc":"东九楼A314","day":5,"period":"1-2"},{"name":"法语学习 II","weeks":[12,13,14],"grp":"3C","loc":"东九楼A104","day":5,"period":"1-2"},{"name":"法语学习 II","weeks":[7],"grp":"4C","loc":"东九楼A207","day":5,"period":"1-2"},{"name":"法语学习 II","weeks":[15],"grp":"4C","loc":"东九楼A111","day":5,"period":"1-2"},{"name":"细胞生物学实验","weeks":[6],"grp":"2C","loc":"东十二楼502","day":5,"period":"1-2"},{"name":"PIX 数字技能","weeks":[12],"grp":"4F","loc":"东九楼A310","day":5,"period":"1-2"},{"name":"法语学习 II","weeks":[14],"grp":"2F","loc":"东九楼A304","day":5,"period":"1-2"},{"name":"生物化学实验（一）","weeks":[11],"grp":"3C","loc":"东十二楼508","day":5,"period":"1-2"},{"name":"生物化学实验（一）","weeks":[2],"grp":"4C","loc":"东十二楼508","day":5,"period":"1-2"},{"name":"细胞生物学实验","weeks":[10],"grp":"3C","loc":"东十二楼502","day":5,"period":"1-2"},{"name":"细胞生物学实验","weeks":[3,9],"grp":"4C","loc":"东十二楼502","day":5,"period":"1-2"},{"name":"细胞生物学","weeks":[15],"grp":"2F","loc":"东十二楼112","day":5,"period":"1-2"},{"name":"细胞生物学","weeks":[16],"grp":"3F","loc":"东十二楼111","day":5,"period":"1-2"},{"name":"细胞生物学实验","weeks":[3,9],"grp":"4C","loc":"东十二楼502","day":5,"period":"3-4"},{"name":"生物化学实验（一）","weeks":[11],"grp":"3C","loc":"东十二楼508","day":5,"period":"3-4"},{"name":"细胞生物学实验","weeks":[6],"grp":"2C","loc":"东十二楼502","day":5,"period":"3-4"},{"name":"细胞生物学实验","weeks":[10],"grp":"3C","loc":"东十二楼502","day":5,"period":"3-4"},{"name":"细胞生物学实验","weeks":[11],"grp":"1C","loc":"东十二楼502","day":5,"period":"3-4"},{"name":"化学生物学与进化","weeks":[7],"grp":"4F","loc":"东十二楼403","day":5,"period":"3-4"},{"name":"细胞生物学","weeks":[9],"grp":"1C","loc":"东十二楼210","day":5,"period":"3-4"},{"name":"PIX 数字技能","weeks":[3],"grp":"3F","loc":"东九楼A304","day":5,"period":"3-4"},{"name":"生物学中的数学 1","weeks":[1],"grp":"合C","loc":"东十二楼109","day":5,"period":"3-4"},{"name":"PIX 数字技能","weeks":[9],"grp":"3F","loc":"东九楼A314","day":5,"period":"3-4"},{"name":"生物化学（一）","weeks":[8],"grp":"合C","loc":"东十二楼402","day":5,"period":"3-4"},{"name":"生物化学（一）","weeks":[12],"grp":"1F","loc":"东十二楼306","day":5,"period":"3-4"},{"name":"法语学习 II","weeks":[7],"grp":"3C","loc":"东九楼A107","day":5,"period":"3-4"},{"name":"法语学习 II","weeks":[11,12,13,14],"grp":"4C","loc":"东九楼A104","day":5,"period":"3-4"},{"name":"物质结构","weeks":[14],"grp":"3F","loc":"东十二楼306","day":5,"period":"3-4"},{"name":"PIX 数字技能","weeks":[12],"grp":"3F","loc":"东九楼A312","day":5,"period":"3-4"},{"name":"生物化学实验（一）","weeks":[2],"grp":"4C","loc":"东十二楼508","day":5,"period":"3-4"},{"name":"细胞生物学","weeks":[14],"grp":"2C","loc":"东十二楼309","day":5,"period":"3-4"},{"name":"细胞生物学","weeks":[15,16],"grp":"4F","loc":"东十二楼309","day":5,"period":"3-4"},{"name":"法语学习 II","weeks":[2,10,14],"grp":"1F","loc":"东九楼A201","day":5,"period":"3-4"},{"name":"法语学习 II","weeks":[3,11,12,13,15],"grp":"2F","loc":"东九楼A201","day":5,"period":"3-4"},{"name":"细胞生物学","weeks":[13],"grp":"合C","loc":"东十二楼209","day":5,"period":"5-6"},{"name":"细胞生物学","weeks":[15],"grp":"1F","loc":"东十二楼209","day":5,"period":"5-6"},{"name":"细胞生物学","weeks":[14],"grp":"1C","loc":"东十二楼209","day":5,"period":"5-6"},{"name":"细胞生物学","weeks":[16],"grp":"合F","loc":"东十二楼209","day":5,"period":"5-6"},{"name":"物理化学","weeks":[1,6],"grp":"合C","loc":"东十二楼207","day":5,"period":"5-6"},{"name":"PIX 数字技能","weeks":[8],"grp":"2F","loc":"东九楼A203","day":5,"period":"5-6"},{"name":"法语学习 II","weeks":[3,11],"grp":"1F","loc":"东九楼A201","day":5,"period":"5-6"},{"name":"PIX 数字技能","weeks":[12],"grp":"2F","loc":"东九楼A310","day":5,"period":"5-6"},{"name":"化学生物学与进化","weeks":[7],"grp":"1F","loc":"东十二楼209","day":5,"period":"5-6"},{"name":"PIX 数字技能","weeks":[3],"grp":"4F","loc":"东九楼A310","day":5,"period":"5-6"},{"name":"法语学习 II","weeks":[11],"grp":"3C","loc":"东九楼A208","day":5,"period":"5-6"},{"name":"细胞生物学","weeks":[9],"grp":"4C","loc":"东十二楼209","day":5,"period":"5-6"},{"name":"PIX 数字技能","weeks":[9],"grp":"1F","loc":"东九楼A313","day":5,"period":"5-6"},{"name":"法语学习 II","weeks":[2,10],"grp":"2F","loc":"东九楼A201","day":5,"period":"5-6"},{"name":"马克思主义基本原理","weeks":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18],"grp":"合C","loc":"东九楼C303","day":5,"period":"7-8"},{"name":"PIX 数字技能","weeks":[8],"grp":"1F","loc":"东九楼A310","day":5,"period":"9-10"},{"name":"化学生物学与进化","weeks":[7],"grp":"2F","loc":"东十二楼112","day":5,"period":"9-10"},{"name":"细胞生物学实验","weeks":[7,13],"grp":"1C","loc":"东十二楼502","day":6,"period":"1-2"},{"name":"化学生物学与进化","weeks":[7],"grp":"3F","loc":"东十二楼101","day":6,"period":"1-2"},{"name":"细胞生物学实验","weeks":[6,11],"grp":"4C","loc":"东十二楼502","day":6,"period":"1-2"},{"name":"细胞生物学实验","weeks":[8,10,12],"grp":"2C","loc":"东十二楼502","day":6,"period":"1-2"},{"name":"生物化学实验（一）","weeks":[9],"grp":"3C","loc":"东十二楼508","day":6,"period":"1-2"},{"name":"细胞生物学实验","weeks":[14],"grp":"3C","loc":"东十二楼502","day":6,"period":"1-2"},{"name":"细胞生物学实验","weeks":[7,13],"grp":"1C","loc":"东十二楼502","day":6,"period":"3-4"},{"name":"化学生物学与进化","weeks":[7],"grp":"2F","loc":"东十二楼101","day":6,"period":"3-4"},{"name":"生物化学实验（一）","weeks":[9],"grp":"3C","loc":"东十二楼508","day":6,"period":"3-4"},{"name":"细胞生物学实验","weeks":[14],"grp":"3C","loc":"东十二楼502","day":6,"period":"3-4"},{"name":"细胞生物学实验","weeks":[6,11],"grp":"4C","loc":"东十二楼502","day":6,"period":"3-4"},{"name":"细胞生物学实验","weeks":[8,10,12],"grp":"2C","loc":"东十二楼502","day":6,"period":"3-4"},{"name":"细胞生物学实验","weeks":[12],"grp":"2C","loc":"东十二楼502","day":6,"period":"5-6"},{"name":"细胞生物学实验","weeks":[7,14],"grp":"3C","loc":"东十二楼502","day":6,"period":"5-6"},{"name":"细胞生物学实验","weeks":[13],"grp":"1C","loc":"东十二楼502","day":6,"period":"5-6"},{"name":"化学生物学与进化","weeks":[7],"grp":"4F","loc":"东十二楼101","day":6,"period":"5-6"},{"name":"细胞生物学实验","weeks":[10,11],"grp":"4C","loc":"东十二楼502","day":6,"period":"5-6"},{"name":"细胞生物学实验","weeks":[13],"grp":"1C","loc":"东十二楼502","day":6,"period":"7-8"},{"name":"化学生物学与进化","weeks":[7],"grp":"1F","loc":"东十二楼101","day":6,"period":"7-8"},{"name":"细胞生物学实验","weeks":[10,11],"grp":"4C","loc":"东十二楼502","day":6,"period":"7-8"},{"name":"细胞生物学实验","weeks":[7,14],"grp":"3C","loc":"东十二楼502","day":6,"period":"7-8"},{"name":"细胞生物学实验","weeks":[12],"grp":"2C","loc":"东十二楼502","day":6,"period":"7-8"},{"name":"生物化学实验（一）","weeks":[10],"grp":"1C","loc":"东十二楼508","day":7,"period":"1-2"},{"name":"生物化学实验（一）","weeks":[11],"grp":"2C","loc":"东十二楼508","day":7,"period":"1-2"},{"name":"生物化学实验（一）","weeks":[10],"grp":"1C","loc":"东十二楼508","day":7,"period":"3-4"},{"name":"生物化学实验（一）","weeks":[11],"grp":"2C","loc":"东十二楼508","day":7,"period":"3-4"},{"name":"生物化学实验（一）","weeks":[10],"grp":"1C","loc":"东十二楼508","day":7,"period":"5-6"},{"name":"生物化学实验（一）","weeks":[11],"grp":"2C","loc":"东十二楼508","day":7,"period":"5-6"},{"name":"生物化学实验（一）","weeks":[10],"grp":"1C","loc":"东十二楼508","day":7,"period":"7-8"},{"name":"生物化学实验（一）","weeks":[11],"grp":"2C","loc":"东十二楼508","day":7,"period":"7-8"}],"exams":[{"name":"马克思主义基本原理","week":20,"day":2,"part":"下午","date":"2027-01-12","text":"20周周二（2027年1月12日）下午"},{"name":"生物化学（一）","week":17,"day":5,"part":"晚上","date":"2026-12-25","text":"17周 星期五（2026年12月25日） 晚上"},{"name":"物理化学","week":13,"day":3,"part":"晚上","date":"2026-11-25","text":"13周星期三（ 2026年11月25日 ） 晚上"},{"name":"化学生物学与进化","week":11,"day":3,"part":"晚上","date":"2026-11-11","text":"11周星期三 （2026年11月11日） 晚上"},{"name":"物质结构","week":17,"day":4,"part":"晚上","date":"2026-12-24","text":"17周 星期四（2026年12月24日） 晚上"},{"name":"细胞生物学","week":19,"day":4,"part":"下午","date":"2027-01-07","text":"19周 星期四（2027年1月7 日）下午"},{"name":"PIX 数字技能","week":13,"day":4,"part":"","date":null,"text":"考查（13周周四5-6节PIX CERTIFICATION）"},{"name":"生物学中的数学 1","week":7,"day":2,"part":"晚上","date":"2026-10-13","text":"7周 星期二（2026年10月13日 ） 晚上"},{"name":"习近平新时代中国特色社会主义思想概论","week":14,"day":6,"part":"下午","date":"2026-12-05","text":"14周周六（2026年12月5日）下午"},{"name":"形势与政策","week":null,"day":null,"part":"","date":null,"text":"考查"},{"name":"概率论与数理统计（B）","week":19,"day":6,"part":"上午","date":"2027-01-09","text":"19周周六（2027年1月9日）上午"},{"name":"细胞生物学实验","week":null,"day":null,"part":"","date":null,"text":"考查"},{"name":"生物化学实验（一）","week":null,"day":null,"part":"","date":null,"text":"考查"},{"name":"法语学习 II","week":null,"day":null,"part":"","date":null,"text":"考查"},{"name":"人工智能概论（C）","week":null,"day":null,"part":"","date":null,"text":"考查"},{"name":"大学体育","week":null,"day":null,"part":"","date":null,"text":"考查"}],"start":"2026-08-31"};
+const START = new Date(DATA.start + "T00:00:00");
+const DOW = ["一","二","三","四","五","六","日"];
+const TIMES = [["08:00","08:45"],["08:50","09:35"],["09:55","10:40"],["10:45","11:30"],
+  ["14:00","14:45"],["14:50","15:35"],["15:55","16:40"],["16:45","17:30"],
+  ["19:00","19:45"],["19:50","20:35"],["20:45","21:30"],["21:35","22:20"]];
+const COURSES = [...new Set(DATA.rows.map(r=>r.name))];
+const HEXES=(()=>{
+  const S=15, N=6, out=[];
+  for(let q=-N;q<=N;q++) for(let r=Math.max(-N,-q-N);r<=Math.min(N,-q+N);r++){
+    const ring=(Math.abs(q)+Math.abs(q+r)+Math.abs(r))/2;
+    const x=1.5*S*q, y=Math.sqrt(3)*S*(r+q/2);
+    const hue=ring===0?0:Math.round((Math.atan2(y,x)*180/Math.PI+450)%360);
+    out.push({x,y,ring,hue,w:2*S,h:Math.sqrt(3)*S});
+  }
+  return out;
+})();
+// 默认色直接取自色盘（第 5 环），所以每门课的默认颜色在盘上都能找到并显示为选中
+const RING5 = HEXES.filter(o=>o.ring===5);
+const COLOR = {};
+COURSES.forEach((c,i)=>{ const o=RING5[Math.round(i*RING5.length/COURSES.length)%RING5.length]; COLOR[c]=[o.hue,5]; });
+// 蜂窝色盘：存 [色相, 环号]，实际显示色按当前深浅模式推导
+const RING_S=[0,30,50,66,80,92,100], RING_L=[74,70,63,55,47,38,30];
+function isDark(){
+  const t=document.documentElement.getAttribute("data-theme");
+  if(t==="dark") return true; if(t==="light") return false;
+  return window.matchMedia("(prefers-color-scheme: dark)").matches;
+}
+function wheelColor(h,r){return "hsl("+h+" "+RING_S[r]+"% "+RING_L[r]+"%)";}
+// 课块文字/边框色：浅色模式压暗、深色模式提亮，保证任何盘面颜色都看得清
+function inkColor(h,r,d){const s=RING_S[r], l=RING_L[r];
+  return d ? "hsl("+h+" "+Math.max(s,40)+"% "+Math.max(l,68)+"%)"
+           : "hsl("+h+" "+Math.max(s,42)+"% "+Math.min(l,40)+"%)";}
+let CUSTOM = {};
+try{ CUSTOM = JSON.parse(localStorage.getItem("kb_colors")||"{}") || {}; }catch(e){ CUSTOM={}; }
+function saveColors(){ try{ localStorage.setItem("kb_colors", JSON.stringify(CUSTOM)); }catch(e){} }
+function customOf(name,key){
+  const a = CUSTOM["s:"+key]; if(Array.isArray(a)) return a;
+  const b = CUSTOM["c:"+name]; return Array.isArray(b) ? b : null;
+}
+// 返回 [文字/边框色, 底色]
+function evById(id){ return EVENTS.find(x=>x.id===id); }
+function colorOf(name,key,l){
+  let c;
+  if(l && l.kind==="ev"){ const ev=evById(l.id); c = (ev&&ev.color) || EV_DEFAULT_COLOR; }
+  else c = customOf(name,key) || COLOR[name];
+  return [inkColor(c[0],c[1],isDark()), wheelColor(c[0],c[1])];
+}
+const ROW_H = 46;
+const ABBR={"细胞生物学":"细胞","细胞生物学实验":"细胞实验","生物化学（一）":"生化","生物化学实验（一）":"生化实验",
+ "化学生物学与进化":"化生进化","物质结构":"物质结构","物理化学":"物化","PIX 数字技能":"PIX","法语学习 II":"法语",
+ "生物学中的数学 1":"生物数学","概率论与数理统计（B）":"概率统计","马克思主义基本原理":"马原",
+ "习近平新时代中国特色社会主义思想概论":"习概","人工智能概论（C）":"AI 概论","大学体育":"体育","形势与政策":"形策"};
+// 表格里去掉课程名末尾的序号（生物学中的数学 1 → 生物学中的数学），详情里仍显示完整名称
+const shortName=n=>n.replace(/[（(][一二三四五六七八九十ABCDIVX\d]+[）)]\s*$/,"")
+                    .replace(/\s+(\d+|[IVX]+)\s*$/,"").trim();
+const grpShort=g=>(g[0]==="合"?"大班":"小班")+"·"+(g.slice(-1)==="F"?"法":"中");
+const grpLong=g=>(g[0]==="合"?"大班课":"小班课")+"（"+(g.slice(-1)==="F"?"法方":"中方")+"授课）";
+const cleanLoc=l=>l.replace(/[（）]/g,"").replace("上课地点以hub系统通知为准","待通知").replace("上课地点以通知为准","待通知");
+const shortLoc=l=>cleanLoc(l);
+
+function dateOf(week,day){const d=new Date(START);d.setDate(d.getDate()+(week-1)*7+(day-1));return d;}
+
+function fmt(d){return (d.getMonth()+1)+"/"+d.getDate();}
+function iso(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+// 一律按北京时间（UTC+8）判断"今天"，与设备所在时区无关
+const BJ = new Date(Date.now() + 8*3600e3);
+const TODAY = BJ.toISOString().slice(0,10);
+const BJ_MINS = BJ.getUTCHours()*60 + BJ.getUTCMinutes();
+const BJ_DOW = (BJ.getUTCDay()+6)%7 + 1;
+const DAY_DIFF = Math.round((Date.parse(TODAY+"T00:00:00Z") - Date.parse(DATA.start+"T00:00:00Z"))/864e5);
+function sameDay(d){return iso(d)===TODAY;}
+
+const ICON={
+ auto:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18" /><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/></svg>',
+ light:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2.5 12h2M19.5 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>',
+ dark:'<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a7.5 7.5 0 1 0 10.5 10.5z"/></svg>'};
+const TXT={auto:"跟随系统",light:"浅色",dark:"深色"};
+let theme="auto";
+try{const t=localStorage.getItem("theme"); if(t) theme=t;}catch(e){}
+function applyTheme(){
+  const r=document.documentElement;
+  if(theme==="auto") r.removeAttribute("data-theme"); else r.setAttribute("data-theme",theme);
+  document.getElementById("themeIcon").innerHTML=ICON[theme];
+  document.getElementById("themeTxt").textContent=TXT[theme];
+}
+new MutationObserver(()=>{
+  const r=document.documentElement, cur=r.getAttribute("data-theme");
+  if(theme!=="auto" && cur!==theme) r.setAttribute("data-theme",theme);
+}).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+applyTheme();
+
+// 备注：按「周次+星期+节次+课程」保存在本机浏览器
+let NOTES = {};
+try{ NOTES = JSON.parse(localStorage.getItem("kb_notes")||"{}") || {}; }catch(e){ NOTES={}; }
+function saveNotes(){ try{ localStorage.setItem("kb_notes", JSON.stringify(NOTES)); }catch(e){} }
+function noteKey(w,d,s,name){ return w+"|"+d+"|"+s+"|"+name; }
+
+// 自定义日程
+let EVENTS = [];
+try{ EVENTS = JSON.parse(localStorage.getItem("kb_events")||"[]") || []; }catch(e){ EVENTS=[]; }
+function saveEvents(){ try{ localStorage.setItem("kb_events", JSON.stringify(EVENTS)); }catch(e){} }
+const EV_DEFAULT_COLOR=[204,5];
+function evWeeks(ev){ return ev.rep==="week" ? Array.from({length:20},(_,i)=>i+1) : (ev.weeks||[]); }
+function parseWeeks(str){
+  const out=new Set();
+  String(str||"").split(/[,，、\s]+/).forEach(p=>{
+    const m=p.match(/^(\d+)\s*[-–~]\s*(\d+)$/);
+    if(m){ for(let i=+m[1];i<=+m[2];i++) if(i>=1&&i<=20) out.add(i); }
+    else if(/^\d+$/.test(p) && +p>=1 && +p<=20) out.add(+p);
+  });
+  return [...out].sort((a,b)=>a-b);
+}
+
+let cls = 1, week = 1;
+try{const s=localStorage.getItem("cls"); if(s) cls=+s;}catch(e){}
+const rawWeek = Math.floor(DAY_DIFF/7)+1;
+const curWeek = Math.min(20, Math.max(1, rawWeek));
+week = curWeek;
+
+function lessons(w,c){
+  const tags = new Set(["合C","合F",c+"C",c+"F"]);
+  const out = DATA.rows.filter(r=>r.weeks.includes(w)&&tags.has(r.grp))
+    .map(r=>{const [a,b]=r.period.split("-").map(Number);return {...r,s:a,e:b};});
+  // merge adjacent periods of same course+location within a day
+  const byDay = {};
+  out.forEach(r=>(byDay[r.day]=byDay[r.day]||[]).push(r));
+  const merged=[];
+  for(const day in byDay){
+    const list = byDay[day].sort((x,y)=>x.s-y.s);
+    const used = new Array(list.length).fill(false);
+    list.forEach((r,i)=>{
+      if(used[i]) return; used[i]=true;
+      let cur={...r};
+      let again=true;
+      while(again){ again=false;
+        list.forEach((o,j)=>{
+          if(used[j]||o.name!==cur.name||o.loc!==cur.loc||o.grp!==cur.grp) return;
+          const boundary = (cur.e===4&&o.s===5)||(cur.e===8&&o.s===9);
+          if(o.s===cur.e+1 && !boundary){used[j]=true;cur.e=o.e;again=true;}
+        });
+      }
+      merged.push(cur);
+    });
+  }
+  EVENTS.forEach(ev=>{
+    if(evWeeks(ev).includes(w))
+      merged.push({kind:"ev", id:ev.id, name:ev.name, loc:ev.loc||"", grp:"", day:ev.day,
+                   s:ev.s, e:ev.e, weeks:evWeeks(ev)});
+  });
+  return merged;
+}
+
+function render(){
+  const L = lessons(week,cls);
+  const P0 = 1, P1 = 12;
+  const VIS = [1,2,3,4,5,6,7];
+  const NC = VIS.length;
+  document.querySelector(".app").style.setProperty("--cols","var(--gutter) repeat("+NC+",1fr)");
+  // header
+  document.getElementById("wkLabel").textContent = "第 " + week + " 周";
+  const mon = dateOf(week,1), sun = dateOf(week,7);
+  let tag = week<=18 ? "教学周" : "考试周";
+  if(rawWeek<1) tag = "距开学 "+(-DAY_DIFF)+" 天";
+  else if(rawWeek>20) tag = "学期已结束";
+  document.getElementById("wkRange").textContent = fmt(mon)+" – "+fmt(sun)+"　"+tag;
+  document.getElementById("todayBtn").hidden = (week===curWeek);
+  document.getElementById("prev").disabled = week<=1;
+  document.getElementById("next").disabled = week>=20;
+  document.querySelectorAll(".chip").forEach(b=>b.setAttribute("aria-pressed", (+b.dataset.cls===cls)+""));
+
+  const days = document.getElementById("days");
+  days.innerHTML = '<div></div>' + VIS.map((dn)=>{
+    const n = DOW[dn-1], d = dateOf(week,dn), t = sameDay(d);
+    return '<div class="'+(t?"is-today":"")+'"><div class="dow">周'+n+'</div><div class="dnum mono">'+d.getDate()+'</div></div>';
+  }).join("");
+
+  const ex = DATA.exams.filter(e=>e.week===week);
+  const strip = document.getElementById("examStrip");
+  strip.hidden = !ex.length;
+  if(ex.length) strip.innerHTML = '<b>本周考试</b>' + ex.map(e=>e.name+"（周"+DOW[e.day-1]+(e.part?" "+e.part:"")+"）").join("　·　");
+
+  // grid
+  let g = '<div class="grid"><div class="rows">';
+  for(let p=P0;p<=P1;p++){
+    const sep = (p===4||p===8)?" sep":"";
+    g += '<div class="row'+sep+'" style="height:'+ROW_H+'px">'+
+      '<div class="tick mono"><span class="n">'+p+'</span><span class="t">'+TIMES[p-1][0]+'</span></div>';
+    VIS.forEach(d=>{
+      const t = sameDay(dateOf(week,d));
+      g += '<div class="cell'+(d>5?" weekend":"")+(t?" today":"")+'"></div>';
+    });
+    g += '</div>';
+  }
+  g += '</div><div class="blocks" id="blocks"></div></div>';
+  const slide = document.getElementById("slide");
+  slide.innerHTML = g;
+
+  // blocks
+  const cols = {};
+  L.forEach(l=>(cols[l.day]=cols[l.day]||[]).push(l));
+  const box = document.getElementById("blocks");
+  let html="";
+  for(const day in cols){
+    const list = cols[day];
+    // overlap lanes: greedy assignment within clusters
+    list.sort((a,b)=>a.s-b.s || a.e-b.e);
+    let cluster=[], clusterEnd=0;
+    const flush=()=>{ const n=Math.max(1,...cluster.map(x=>x.lane+1)); cluster.forEach(x=>x.lanes=n); cluster=[]; };
+    list.forEach(l=>{
+      if(cluster.length && l.s>clusterEnd){ flush(); clusterEnd=0; }
+      const taken=new Set(cluster.filter(o=>o.s<=l.e&&l.s<=o.e).map(o=>o.lane));
+      let lane=0; while(taken.has(lane)) lane++;
+      l.lane=lane; cluster.push(l); clusterEnd=Math.max(clusterEnd,l.e);
+    });
+    flush();
+    list.forEach(l=>{
+      const colW = 100/NC, w = colW/l.lanes;
+      const left = VIS.indexOf(+day)*colW + l.lane*w;
+      const top = (l.s-P0)*ROW_H, h = (l.e-l.s+1)*ROW_H;
+      const CC = colorOf(l.name,noteKey(week,+day,l.s,l.name),l);
+      html += '<button class="blk" style="--c:'+CC[0]+';--cb:'+CC[1]+';left:calc('+left+'% + 2px);width:calc('+w+'% - 4px);top:'+(top+2)+'px;height:'+(h-4)+'px" '+
+        'data-l=\''+JSON.stringify({n:l.name,loc:l.loc,g:l.grp,s:l.s,e:l.e,d:+day,w:l.weeks,kind:l.kind,id:l.id}).replace(/'/g,"&#39;")+'\'>'+
+        '<div class="nm">'+shortName(l.name)+'</div><div class="lc">'+shortLoc(l.loc)+'</div>'+
+        (h>=90&&l.grp?'<div class="gp">'+grpShort(l.grp)+'</div>':'')+
+        (NOTES[noteKey(week,+day,l.s,l.name)]?'<span class="dot"></span>':'')+'</button>';
+    });
+  }
+  box.innerHTML = html;
+  if(!L.length){
+    box.insertAdjacentHTML("afterend",'<div class="empty">本周没有课　·　好好休息</div>');
+  }
+  // now line
+  if(week===curWeek && rawWeek>=1 && rawWeek<=20){
+    const dow = BJ_DOW;
+    const ci = VIS.indexOf(dow); if(ci<0) return;
+    const mins = BJ_MINS;
+    let y=null;
+    for(let p=P0;p<=P1;p++){
+      const [a,b]=TIMES[p-1]; const s=+a.slice(0,2)*60+ +a.slice(3), e=+b.slice(0,2)*60+ +b.slice(3);
+      if(mins>=s&&mins<=e){ y=(p-P0)*ROW_H + (mins-s)/(e-s)*ROW_H; break; }
+      if(p<P1){ const [na]=TIMES[p]; const ns=+na.slice(0,2)*60+ +na.slice(3);
+        if(mins>e&&mins<ns){ y=(p-P0+1)*ROW_H; break; } }
+    }
+    if(y!==null){
+      const el=document.createElement("div"); el.className="nowline";
+      el.style.top=y+"px"; el.style.left=(ci*100/NC)+"%"; el.style.width=(100/NC)+"%";
+      box.appendChild(el);
+    }
+  }
+}
+
+// sheet
+const sheet=document.getElementById("sheet"), sheetBg=document.getElementById("sheetBg");
+let curKey=null, curName=null, curEv=null, noteTimer=null;
+
+function renderPal(){
+  const cur = curEv ? (curEv.color||EV_DEFAULT_COLOR) : (customOf(curName,curKey) || COLOR[curName]);
+  const W=Math.max(...HEXES.map(o=>o.x))*2+HEXES[0].w, H=Math.max(...HEXES.map(o=>o.y))*2+HEXES[0].h;
+  const wheel=document.getElementById("wheel");
+  wheel.style.width=W+"px"; wheel.style.height=H+"px";
+  wheel.innerHTML = HEXES.map(o=>{
+    const on = cur && cur[0]===o.hue && cur[1]===o.ring;
+    return '<button type="button" class="'+(on?"on":"")+'" data-h="'+o.hue+'" data-r="'+o.ring+'" '+
+      'style="left:'+(o.x+W/2-o.w/2)+'px;top:'+(o.y+H/2-o.h/2)+'px;width:'+o.w+'px;height:'+o.h+'px;'+
+      '--c:'+wheelColor(o.hue,o.ring)+'"></button>';
+  }).join("");
+  const sw=document.getElementById("swatch");
+  if(sw) sw.style.setProperty("--sw", wheelColor(cur[0],cur[1]));
+}
+document.getElementById("wheel").addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  const v=[+b.dataset.h,+b.dataset.r], all=document.getElementById("applyAll").checked;
+  if(curEv){ curEv.color=v; saveEvents(); }
+  else if(all){ CUSTOM["c:"+curName]=v; delete CUSTOM["s:"+curKey]; saveColors(); }
+  else { CUSTOM["s:"+curKey]=v; saveColors(); }
+  renderPal(); render();
+  document.getElementById("picker").hidden=true;
+});
+document.getElementById("resetColor").onclick=()=>{
+  if(curEv){ delete curEv.color; saveEvents(); renderPal(); render(); document.getElementById("picker").hidden=true; return; }
+  delete CUSTOM["s:"+curKey];
+  if(document.getElementById("applyAll").checked) delete CUSTOM["c:"+curName];
+  saveColors(); renderPal(); render();
+  document.getElementById("picker").hidden=true;
+};
+document.addEventListener("click",e=>{
+  if(e.target.closest("#swatchBtn")){
+    const p=document.getElementById("picker"); p.hidden=!p.hidden;
+    if(!p.hidden){ renderPal(); p.scrollIntoView({block:"nearest",behavior:"smooth"}); }
+  }
+});
+function openSheet(l){
+  const info = DATA.info[l.n] || {};
+  const isEv = l.kind==="ev";
+  curEv = isEv ? evById(l.id) : null;
+  document.getElementById("shTitle").textContent = l.n;
+  const d = dateOf(week,l.d);
+  document.getElementById("shSub").textContent =
+    (d.getMonth()+1)+"月"+d.getDate()+"日 周"+DOW[l.d-1]+"　"+l.s+"–"+l.e+"节　"+TIMES[l.s-1][0]+"–"+TIMES[l.e-1][1];
+  const swatchHTML = '<span class="swatch-row"><button type="button" id="swatchBtn" aria-label="更改颜色"><span class="swatch" id="swatch"></span></button></span>';
+  const rows = isEv ? [
+    ["地点", cleanLoc(l.loc) || "—"],
+    ["重复", curEv && curEv.rep==="week" ? "每周" : (l.w.length>1 ? l.w.join("、")+" 周" : "仅第 "+l.w[0]+" 周")],
+    ["颜色", swatchHTML]
+  ] : [
+    ["地点", cleanLoc(l.loc)],
+    ["班次", grpLong(l.g)],
+    ["教师", info.teacher||"—"],
+    ["学时", info.hc||"—"],
+    ["考核", info.exam||"—"],
+    ["上课周", l.w.join("、")+" 周"],
+    ["颜色", swatchHTML]
+  ];
+  document.getElementById("shKv").innerHTML = rows.map(r=>"<dt>"+r[0]+"</dt><dd>"+r[1]+"</dd>").join("");
+  curKey = noteKey(week,l.d,l.s,l.n);
+  curName = l.n;
+  document.getElementById("picker").hidden = true;
+  document.getElementById("applyAllRow").hidden = isEv;
+  document.getElementById("sheetActs").hidden = !isEv;
+  renderPal();
+  const nb=document.getElementById("noteBox");
+  nb.value = isEv ? ((curEv&&curEv.note)||"") : (NOTES[curKey] || "");
+  document.getElementById("noteSaved").classList.remove("on");
+  sheet.hidden=false; sheetBg.hidden=false;
+  requestAnimationFrame(()=>{sheet.classList.add("open");sheetBg.classList.add("open");});
+}
+function closeSheet(){
+  resetDelBtn("shDelete");
+  sheet.classList.remove("open");sheetBg.classList.remove("open");
+  setTimeout(()=>{sheet.hidden=true;sheetBg.hidden=true;},240);
+}
+document.getElementById("noteBox").addEventListener("input",e=>{
+  if(!curKey) return;
+  const v=e.target.value;
+  if(curEv) curEv.note=v;
+  else if(v.trim()) NOTES[curKey]=v; else delete NOTES[curKey];
+  clearTimeout(noteTimer);
+  noteTimer=setTimeout(()=>{
+    if(curEv) saveEvents(); else saveNotes();
+    const s=document.getElementById("noteSaved"); s.classList.add("on");
+    setTimeout(()=>s.classList.remove("on"),1400);
+    render();
+  },350);
+});
+const backupBox=document.getElementById("backupBox");
+document.getElementById("backupBtn").onclick=()=>{
+  document.getElementById("backupText").value=JSON.stringify({notes:NOTES,colors:CUSTOM,events:EVENTS});
+  backupBox.hidden=false;
+};
+document.getElementById("backupClose").onclick=()=>{backupBox.hidden=true;};
+document.getElementById("backupRestore").onclick=()=>{
+  try{
+    const obj=JSON.parse(document.getElementById("backupText").value);
+    if(obj && typeof obj==="object"){
+      NOTES = obj.notes || obj; CUSTOM = obj.colors || {}; EVENTS = obj.events || [];
+      saveNotes(); saveColors(); saveEvents(); render();
+      if(curKey) document.getElementById("noteBox").value=NOTES[curKey]||"";
+      backupBox.hidden=true; }
+  }catch(err){
+    const t=document.getElementById("backupText");
+    t.style.borderColor="var(--today)";
+    t.value="⚠️ 这段文字读不出来，请确认是完整复制的备份内容。\n\n"+t.value;
+  }
+};
+backupBox.addEventListener("click",e=>{if(e.target===backupBox)backupBox.hidden=true;});
+sheetBg.addEventListener("click",closeSheet);
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!sheet.hidden)closeSheet();});
+document.addEventListener("click",e=>{
+  const b=e.target.closest(".blk"); if(b) openSheet(JSON.parse(b.dataset.l));
+});
+
+// week switching with slide animation
+const slide=document.getElementById("slide"), vp=document.getElementById("viewport");
+function go(delta){
+  const nw = Math.min(20, Math.max(1, week+delta));
+  if(nw===week) return;
+  const dir = nw>week ? 1 : -1;
+  slide.style.transition="transform .16s ease-in, opacity .16s ease-in";
+  slide.style.transform="translateX("+(-dir*28)+"px)"; slide.style.opacity="0";
+  setTimeout(()=>{
+    week=nw; render();
+    slide.style.transition="none";
+    slide.style.transform="translateX("+(dir*28)+"px)";
+    requestAnimationFrame(()=>{
+      slide.style.transition="transform .2s cubic-bezier(.3,.7,.4,1),opacity .2s";
+      slide.style.transform="none"; slide.style.opacity="1";
+    });
+  },160);
+}
+document.getElementById("prev").onclick=()=>go(-1);
+document.getElementById("next").onclick=()=>go(1);
+document.getElementById("todayBtn").onclick=()=>{ if(curWeek!==week) go(curWeek-week); };
+document.getElementById("themeBtn").onclick=()=>{
+  theme = theme==="auto" ? "light" : theme==="light" ? "dark" : "auto";
+  try{localStorage.setItem("theme",theme);}catch(e){}
+  applyTheme(); render();
+};
+document.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{
+  cls=+b.dataset.cls; try{localStorage.setItem("cls",cls);}catch(e){} render();
+});
+
+// ---------- 新建 / 编辑日程 ----------
+const evModal=document.getElementById("evModal");
+let editingId=null, evColor=null;
+function fillSelect(el,arr,fmtFn){ el.innerHTML=arr.map(v=>'<option value="'+v+'">'+fmtFn(v)+'</option>').join(""); }
+fillSelect(document.getElementById("evDay"),[1,2,3,4,5,6,7],v=>"周"+DOW[v-1]);
+[["evS"],["evE"]].forEach(([id])=>fillSelect(document.getElementById(id),
+  Array.from({length:12},(_,i)=>i+1), v=>"第 "+v+" 节 "+TIMES[v-1][0]));
+function updWeeksHint(){
+  const v=document.getElementById("evWeeks").value, w=parseWeeks(v);
+  document.getElementById("evWeeksHint").innerHTML = w.length
+    ? '共 <b>'+w.length+'</b> 周：第 '+w.join("、")+" 周"
+    : '用逗号分隔单周、用短横线表示连续，如 <b>3, 5-8, 11</b>；范围 1–20 周';
+}
+document.getElementById("evWeeks").addEventListener("input",updWeeksHint);
+document.getElementById("evRep").onchange=e=>{
+  const on = e.target.value==="custom";
+  document.getElementById("evWeeksRow").hidden = !on;
+  if(on) updWeeksHint();
+};
+function evSwatchPaint(){
+  document.getElementById("evSwatch").style.setProperty("--sw", wheelColor((evColor||EV_DEFAULT_COLOR)[0],(evColor||EV_DEFAULT_COLOR)[1]));
+}
+function renderEvWheel(){
+  const cur = evColor||EV_DEFAULT_COLOR;
+  const W=Math.max(...HEXES.map(o=>o.x))*2+HEXES[0].w, H=Math.max(...HEXES.map(o=>o.y))*2+HEXES[0].h;
+  const wheel=document.getElementById("evWheel");
+  wheel.style.width=W+"px"; wheel.style.height=H+"px";
+  wheel.innerHTML = HEXES.map(o=>{
+    const on = cur[0]===o.hue && cur[1]===o.ring;
+    return '<button type="button" class="'+(on?"on":"")+'" data-h="'+o.hue+'" data-r="'+o.ring+'" '+
+      'style="left:'+(o.x+W/2-o.w/2)+'px;top:'+(o.y+H/2-o.h/2)+'px;width:'+o.w+'px;height:'+o.h+'px;'+
+      '--c:'+wheelColor(o.hue,o.ring)+'"></button>';
+  }).join("");
+}
+document.getElementById("evSwatchBtn").onclick=()=>{
+  const p=document.getElementById("evPicker"); p.hidden=!p.hidden;
+  if(!p.hidden){ renderEvWheel(); p.scrollIntoView({block:"nearest",behavior:"smooth"}); }
+};
+document.getElementById("evWheel").addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  evColor=[+b.dataset.h,+b.dataset.r]; evSwatchPaint(); renderEvWheel();
+  document.getElementById("evPicker").hidden=true;
+});
+function openEvModal(ev, preset){
+  editingId = ev ? ev.id : null;
+  document.getElementById("evHead").textContent = ev ? "编辑日程" : "新建日程";
+  document.getElementById("evName").value = ev ? ev.name : "";
+  document.getElementById("evLoc").value = ev ? (ev.loc||"") : "";
+  document.getElementById("evNote").value = ev ? (ev.note||"") : "";
+  document.getElementById("evDay").value = ev ? ev.day : (preset&&preset.day || 1);
+  document.getElementById("evS").value = ev ? ev.s : (preset&&preset.p || 1);
+  document.getElementById("evE").value = ev ? ev.e : ((preset&&(preset.p2||preset.p+1)) || 2);
+  const rep = ev ? ev.rep : "once";
+  document.getElementById("evRep").value = rep;
+  document.getElementById("evWeeksRow").hidden = rep!=="custom";
+  document.getElementById("evWeeks").value = ev && ev.weeks && ev.weeks.length ? ev.weeks.join(", ") : String(week);
+  updWeeksHint();
+  evColor = ev && ev.color ? ev.color.slice() : null;
+  evSwatchPaint();
+  document.getElementById("evPicker").hidden = true;
+  document.getElementById("evDelete").hidden = !ev;
+  evModal.hidden = false;
+  setTimeout(()=>document.getElementById("evName").focus(),80);
+}
+function resetDelBtn(id){ const b=document.getElementById(id);
+  if(b && b.dataset.label){ clearTimeout(+b.dataset.t); b.dataset.armed="0"; b.textContent=b.dataset.label; } }
+function closeEvModal(){ evModal.hidden = true; resetDelBtn("evDelete"); }
+document.getElementById("evCancel").onclick = closeEvModal;
+evModal.addEventListener("click",e=>{ if(e.target===evModal) closeEvModal(); });
+document.getElementById("evSave").onclick=()=>{
+  const name=document.getElementById("evName").value.trim();
+  if(!name){ document.getElementById("evName").focus(); return; }
+  let s=+document.getElementById("evS").value, e=+document.getElementById("evE").value;
+  if(e<s) e=s;
+  const rep=document.getElementById("evRep").value;
+  let weeks = rep==="custom" ? parseWeeks(document.getElementById("evWeeks").value) : (rep==="once" ? [week] : []);
+  if(rep!=="week" && !weeks.length) weeks=[week];
+  const data={ name, day:+document.getElementById("evDay").value, s, e,
+    loc:document.getElementById("evLoc").value.trim(), rep, weeks,
+    note:document.getElementById("evNote").value, color:evColor };
+  if(editingId){ Object.assign(evById(editingId), data); }
+  else { EVENTS.push({id:"e"+Date.now().toString(36)+Math.random().toString(36).slice(2,6), ...data}); }
+  saveEvents(); closeEvModal(); render();
+};
+document.getElementById("evDelete").onclick=(e)=>{
+  if(!editingId) return;
+  armDelete(e.currentTarget, ()=>{
+    EVENTS = EVENTS.filter(x=>x.id!==editingId);
+    saveEvents(); closeEvModal(); render();
+  });
+};
+document.getElementById("fab").onclick=()=>openEvModal(null,{day:BJ_DOW,p:1,p2:2});
+document.getElementById("shEdit").onclick=()=>{ const ev=curEv; closeSheet(); if(ev) setTimeout(()=>openEvModal(ev),200); };
+function armDelete(btn, run){
+  if(btn.dataset.armed==="1"){
+    clearTimeout(+btn.dataset.t); btn.dataset.armed="0"; btn.textContent=btn.dataset.label; run(); return;
+  }
+  btn.dataset.label = btn.dataset.label || btn.textContent;
+  btn.dataset.armed="1"; btn.textContent="再点一次删除";
+  btn.dataset.t = setTimeout(()=>{ btn.dataset.armed="0"; btn.textContent=btn.dataset.label; },3000);
+}
+document.getElementById("shDelete").onclick=(e)=>{
+  if(!curEv) return;
+  return armDelete(e.currentTarget, ()=>{
+    EVENTS = EVENTS.filter(x=>x.id!==curEv.id);
+    saveEvents(); closeSheet(); render();
+  });
+};
+// 点空格子快速新建
+document.addEventListener("click",e=>{
+  const cell=e.target.closest(".row .cell"); if(!cell) return;
+  if(gestureMoved) return;
+  const row=cell.parentElement, rows=[...row.parentElement.children];
+  const p=rows.indexOf(row)+1, d=[...row.children].indexOf(cell); // 0 是节次栏
+  if(d<1) return;
+  openEvModal(null,{day:d,p});
+});
+
+let sx=0,sy=0,swiping=false,gestureMoved=false;
+vp.addEventListener("touchstart",e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;swiping=true;gestureMoved=false;},{passive:true});
+vp.addEventListener("touchmove",e=>{
+  if(Math.abs(e.touches[0].clientX-sx)>10||Math.abs(e.touches[0].clientY-sy)>10) gestureMoved=true;
+},{passive:true});
+vp.addEventListener("touchend",e=>{
+  if(!swiping) return; swiping=false;
+  const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+  if(Math.abs(dx)>55 && Math.abs(dx)>Math.abs(dy)*1.6) go(dx<0?1:-1);
+},{passive:true});
+document.addEventListener("keydown",e=>{
+  if(e.key==="ArrowLeft")go(-1); if(e.key==="ArrowRight")go(1);
+});
+render();
+</script>
