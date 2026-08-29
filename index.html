@@ -66,7 +66,10 @@ header{position:sticky;top:0;z-index:30;background:var(--surface);border-bottom:
 
 .exam-strip{display:flex;gap:8px;align-items:center;padding:7px 12px;background:var(--surface-2);
   border-bottom:1px solid var(--line);font-size:12px;color:var(--ink-2)}
-.exam-strip b{color:var(--today);font-weight:500}
+.exam-strip{flex-wrap:wrap;row-gap:2px}
+.exam-strip b{color:var(--today);font-weight:500;margin-right:6px}
+.exam-strip b.next{color:var(--ink-2)}
+.exam-strip .sep2{color:var(--line-strong);margin:0 10px}
 
 .viewport{flex:1;padding-bottom:24px;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
 .slide{transition:transform .22s cubic-bezier(.3,.7,.4,1),opacity .22s}
@@ -82,15 +85,16 @@ header{position:sticky;top:0;z-index:30;background:var(--surface);border-bottom:
 .tick .n{font-size:12px;color:var(--ink-2)}
 .tick .t{font-size:9px;letter-spacing:-.02em}
 .blocks{position:absolute;inset:0 0 0 var(--gutter);pointer-events:none}
-.blk{position:absolute;pointer-events:auto;border-radius:7px;padding:4px 3px;overflow:hidden;text-align:left;
-  background:color-mix(in srgb,var(--cb) var(--tint),var(--surface));
-  border-left:3px solid var(--c);color:var(--ink);display:block;
-  box-shadow:0 1px 1px rgba(0,0,0,.04)}
-.blk:active{background:color-mix(in srgb,var(--cb) var(--tint-2),var(--surface))}
-.blk .nm{font-size:10.5px;font-weight:500;line-height:1.28;color:var(--c);
-  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;word-break:break-all}
-.blk .lc{font-size:9px;line-height:1.4;color:var(--ink-2);margin-top:2px;overflow-wrap:anywhere;letter-spacing:-.01em}
-.blk .gp{font-size:9px;color:var(--ink-2);opacity:.8}
+.blk{position:absolute;pointer-events:auto;border-radius:8px;padding:5px 5px 4px;overflow:hidden;text-align:left;
+  background:var(--c);color:#fff;display:flex;flex-direction:column;
+  box-shadow:0 1px 2px rgba(0,0,0,.10)}
+.blk:active{filter:brightness(.92)}
+.blk .nm{font-size:10.5px;font-weight:500;line-height:1.3;color:#fff;
+  flex:1 1 auto;min-height:0;overflow:hidden;word-break:break-all}
+.blk .foot{margin-top:auto;padding-top:3px}
+.blk .lc{font-size:9px;line-height:1.35;color:rgba(255,255,255,.95);overflow-wrap:anywhere;letter-spacing:-.01em;
+  border-top:1px solid rgba(255,255,255,.35);padding-top:3px}
+.blk .gp{font-size:9px;color:rgba(255,255,255,.85);margin-top:1px}
 .nowline{position:absolute;left:0;right:0;height:0;border-top:2px solid var(--today);z-index:5;pointer-events:none}
 .nowline::before{content:"";position:absolute;left:-4px;top:-5px;width:8px;height:8px;border-radius:50%;background:var(--today)}
 .empty{padding:40px 20px;text-align:center;color:var(--ink-3);font-size:13px}
@@ -157,7 +161,12 @@ header{position:sticky;top:0;z-index:30;background:var(--surface);border-bottom:
 #noteBox::placeholder{color:var(--ink-3)}
 .note-hint{font-size:11px;color:var(--ink-3);margin-top:7px;line-height:1.6;display:flex;gap:10px;flex-wrap:wrap}
 .note-hint button{color:var(--accent);text-decoration:underline;text-underline-offset:2px}
-.blk .dot{position:absolute;top:4px;right:4px;width:5px;height:5px;border-radius:50%;background:var(--c)}
+.blk.exam{position:absolute}
+.blk.exam::after{content:"";position:absolute;inset:3px;border:1.5px dashed rgba(255,255,255,.7);
+  border-radius:5px;pointer-events:none}
+.blk .exlabel{font-size:9px;font-weight:500;letter-spacing:.06em;color:rgba(255,255,255,.95);
+  margin-bottom:2px;flex:none}
+.blk .dot{position:absolute;top:5px;right:5px;width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.9)}
 .backup{position:fixed;inset:0;z-index:60;background:rgba(10,16,14,.5);display:grid;place-items:center;padding:20px}
 .backup .card{background:var(--surface);border-radius:14px;padding:16px;max-width:520px;width:100%;box-shadow:var(--shadow)}
 .backup h3{margin:0 0 4px;font-size:15px}
@@ -280,17 +289,34 @@ const HEXES=(()=>{
   return out;
 })();
 // 默认色直接取自色盘（第 5 环），所以每门课的默认颜色在盘上都能找到并显示为选中
-const RING5 = HEXES.filter(o=>o.ring===5);
+const DEF_SPEC=[[331,5],[28,5],[251,4],[188,6],[68,3],[350,1],[274,2],[46,5],
+                [240,1],[40,2],[252,6],[165,4],[210,3],[300,4],[80,5],[196,3]];
+function snapHue(hue,ring){
+  const cand=HEXES.filter(o=>o.ring===ring);
+  if(!cand.length) return [0,0];
+  let best=cand[0], bd=999;
+  cand.forEach(o=>{ let d=Math.abs(o.hue-hue); d=Math.min(d,360-d); if(d<bd){bd=d;best=o;} });
+  return [best.hue,ring];
+}
 const COLOR = {};
-COURSES.forEach((c,i)=>{ const o=RING5[Math.round(i*RING5.length/COURSES.length)%RING5.length]; COLOR[c]=[o.hue,5]; });
+COURSES.forEach((c,i)=>{ const sp=DEF_SPEC[i%DEF_SPEC.length]; COLOR[c]=snapHue(sp[0],sp[1]); });
 // 蜂窝色盘：存 [色相, 环号]，实际显示色按当前深浅模式推导
-const RING_S=[0,30,50,66,80,92,100], RING_L=[74,70,63,55,47,38,30];
+const RING_S=[26,38,48,58,68,80,92], RING_L=[78,76,72,68,62,55,49];
 function isDark(){
   const t=document.documentElement.getAttribute("data-theme");
   if(t==="dark") return true; if(t==="light") return false;
   return window.matchMedia("(prefers-color-scheme: dark)").matches;
 }
 function wheelColor(h,r){return "hsl("+h+" "+RING_S[r]+"% "+RING_L[r]+"%)";}
+function hsl2rgb(h,s,l){ s/=100; l/=100;
+  const k=n=>(n+h/30)%12, a=s*Math.min(l,1-l);
+  const f=n=>l-a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1)));
+  return [f(0),f(8),f(4)];
+}
+function lum(h,s,l){ const c=hsl2rgb(h,s,l).map(v=>v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4));
+  return 0.2126*c[0]+0.7152*c[1]+0.0722*c[2]; }
+// 色块直接用色盘上的颜色本身
+function fillColor(h,r,d){ return wheelColor(h,r); }
 // 课块文字/边框色：浅色模式压暗、深色模式提亮，保证任何盘面颜色都看得清
 function inkColor(h,r,d){const s=RING_S[r], l=RING_L[r];
   return d ? "hsl("+h+" "+Math.max(s,40)+"% "+Math.max(l,68)+"%)"
@@ -306,9 +332,10 @@ function customOf(name,key){
 function evById(id){ return EVENTS.find(x=>x.id===id); }
 function colorOf(name,key,l){
   let c;
-  if(l && l.kind==="ev"){ const ev=evById(l.id); c = (ev&&ev.color) || EV_DEFAULT_COLOR; }
+  if(l && l.kind==="exam") c = snapHue(345,6);
+  else if(l && l.kind==="ev"){ const ev=evById(l.id); c = (ev&&ev.color) || EV_DEFAULT_COLOR; }
   else c = customOf(name,key) || COLOR[name];
-  return [inkColor(c[0],c[1],isDark()), wheelColor(c[0],c[1])];
+  return [fillColor(c[0],c[1],isDark()), wheelColor(c[0],c[1])];
 }
 const ROW_H = 46;
 const ABBR={"细胞生物学":"细胞","细胞生物学实验":"细胞实验","生物化学（一）":"生化","生物化学实验（一）":"生化实验",
@@ -407,6 +434,15 @@ function lessons(w,c){
       merged.push(cur);
     });
   }
+  const PART={"上午":[1,4],"下午":[5,8],"晚上":[9,12]};
+  DATA.exams.forEach(x=>{
+    if(x.week!==w || !x.day) return;
+    let sp = PART[x.part];
+    if(!sp && x.name==="PIX 数字技能") sp=[5,6];
+    if(!sp) return;
+    merged.push({kind:"exam", name:x.name, loc:"", grp:"", day:x.day, s:sp[0], e:sp[1],
+                 weeks:[w], part:x.part||"", exam:x});
+  });
   EVENTS.forEach(ev=>{
     if(evWeeks(ev).includes(w))
       merged.push({kind:"ev", id:ev.id, name:ev.name, loc:ev.loc||"", grp:"", day:ev.day,
@@ -439,10 +475,15 @@ function render(){
     return '<div class="'+(t?"is-today":"")+'"><div class="dow">周'+n+'</div><div class="dnum mono">'+d.getDate()+'</div></div>';
   }).join("");
 
-  const ex = DATA.exams.filter(e=>e.week===week);
+  const fmtEx = e=>e.name+"（周"+DOW[e.day-1]+(e.part?" "+e.part:"")+"）";
+  const exNow = DATA.exams.filter(e=>e.week===week && e.day);
+  const exNext = DATA.exams.filter(e=>e.week===week+1 && e.day);
   const strip = document.getElementById("examStrip");
-  strip.hidden = !ex.length;
-  if(ex.length) strip.innerHTML = '<b>本周考试</b>' + ex.map(e=>e.name+"（周"+DOW[e.day-1]+(e.part?" "+e.part:"")+"）").join("　·　");
+  strip.hidden = !exNow.length && !exNext.length;
+  strip.innerHTML =
+    (exNow.length ? '<b>本周考试</b>' + exNow.map(fmtEx).join("　·　") : "") +
+    (exNow.length && exNext.length ? '<span class="sep2">|</span>' : "") +
+    (exNext.length ? '<b class="next">下周</b>' + exNext.map(fmtEx).join("　·　") : "");
 
   // grid
   let g = '<div class="grid"><div class="rows">';
@@ -483,10 +524,12 @@ function render(){
       const left = VIS.indexOf(+day)*colW + l.lane*w;
       const top = (l.s-P0)*ROW_H, h = (l.e-l.s+1)*ROW_H;
       const CC = colorOf(l.name,noteKey(week,+day,l.s,l.name),l);
-      html += '<button class="blk" style="--c:'+CC[0]+';--cb:'+CC[1]+';left:calc('+left+'% + 2px);width:calc('+w+'% - 4px);top:'+(top+2)+'px;height:'+(h-4)+'px" '+
-        'data-l=\''+JSON.stringify({n:l.name,loc:l.loc,g:l.grp,s:l.s,e:l.e,d:+day,w:l.weeks,kind:l.kind,id:l.id}).replace(/'/g,"&#39;")+'\'>'+
-        '<div class="nm">'+shortName(l.name)+'</div><div class="lc">'+shortLoc(l.loc)+'</div>'+
-        (h>=90&&l.grp?'<div class="gp">'+grpShort(l.grp)+'</div>':'')+
+      html += '<button class="blk'+(l.kind==="exam"?" exam":"")+'" style="--c:'+CC[0]+';--cb:'+CC[1]+';left:calc('+left+'% + 2px);width:calc('+w+'% - 4px);top:'+(top+2)+'px;height:'+(h-4)+'px" '+
+        'data-l=\''+JSON.stringify({n:l.name,loc:l.loc,g:l.grp,s:l.s,e:l.e,d:+day,w:l.weeks,kind:l.kind,id:l.id,part:l.part}).replace(/'/g,"&#39;")+'\'>'+
+        (l.kind==="exam"?'<div class="exlabel">考试　'+(l.part||"")+'</div>':'')+
+        '<div class="nm">'+shortName(l.name)+'</div>'+
+        '<div class="foot">'+(l.loc?'<div class="lc">'+shortLoc(l.loc)+'</div>':'')+
+        (h>=90&&l.grp?'<div class="gp">'+grpShort(l.grp)+'</div>':'')+'</div>'+
         (NOTES[noteKey(week,+day,l.s,l.name)]?'<span class="dot"></span>':'')+'</button>';
     });
   }
@@ -494,6 +537,17 @@ function render(){
   if(!L.length){
     box.insertAdjacentHTML("afterend",'<div class="empty">本周没有课　·　好好休息</div>');
   }
+  // 课程名按格子剩余高度精确截断
+  document.querySelectorAll(".blk .nm").forEach(el=>{
+    const lh = parseFloat(getComputedStyle(el).lineHeight) || 14;
+    const n = Math.max(1, Math.floor((el.clientHeight + 0.5) / lh));
+    el.style.flex = "0 0 auto";
+    el.style.height = (n * lh) + "px";
+    el.style.display = "-webkit-box";
+    el.style.webkitBoxOrient = "vertical";
+    el.style.webkitLineClamp = n;
+  });
+
   // now line
   if(week===curWeek && rawWeek>=1 && rawWeek<=20){
     const dow = BJ_DOW;
@@ -556,14 +610,20 @@ document.addEventListener("click",e=>{
 });
 function openSheet(l){
   const info = DATA.info[l.n] || {};
-  const isEv = l.kind==="ev";
+  const isEv = l.kind==="ev", isExam = l.kind==="exam";
   curEv = isEv ? evById(l.id) : null;
-  document.getElementById("shTitle").textContent = l.n;
+  document.getElementById("shTitle").textContent = isExam ? (l.n+"　考试") : l.n;
   const d = dateOf(week,l.d);
-  document.getElementById("shSub").textContent =
-    (d.getMonth()+1)+"月"+d.getDate()+"日 周"+DOW[l.d-1]+"　"+l.s+"–"+l.e+"节　"+TIMES[l.s-1][0]+"–"+TIMES[l.e-1][1];
+  document.getElementById("shSub").textContent = isExam
+    ? (d.getMonth()+1)+"月"+d.getDate()+"日 周"+DOW[l.d-1]+"　"+(l.part||"")
+    : (d.getMonth()+1)+"月"+d.getDate()+"日 周"+DOW[l.d-1]+"　"+l.s+"–"+l.e+"节　"+TIMES[l.s-1][0]+"–"+TIMES[l.e-1][1];
   const swatchHTML = '<span class="swatch-row"><button type="button" id="swatchBtn" aria-label="更改颜色"><span class="swatch" id="swatch"></span></button></span>';
-  const rows = isEv ? [
+  const rows = isExam ? [
+    ["科目", l.n],
+    ["时段", (l.part||"—")+"　"+TIMES[l.s-1][0]+"–"+TIMES[l.e-1][1]],
+    ["教师", info.teacher||"—"],
+    ["原文", info.exam||"—"]
+  ] : isEv ? [
     ["地点", cleanLoc(l.loc) || "—"],
     ["重复", curEv && curEv.rep==="week" ? "每周" : (l.w.length>1 ? l.w.join("、")+" 周" : "仅第 "+l.w[0]+" 周")],
     ["颜色", swatchHTML]
@@ -582,6 +642,7 @@ function openSheet(l){
   document.getElementById("picker").hidden = true;
   document.getElementById("applyAllRow").hidden = isEv;
   document.getElementById("sheetActs").hidden = !isEv;
+  document.querySelector(".color-only-row") && 0;
   renderPal();
   const nb=document.getElementById("noteBox");
   nb.value = isEv ? ((curEv&&curEv.note)||"") : (NOTES[curKey] || "");
